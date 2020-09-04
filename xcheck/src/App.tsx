@@ -1,10 +1,12 @@
 import React from 'react';
-import './App.css';
 
 export class App extends React.Component<{},{}> {
-  <div className = "App">
-
-  </div>
+  render(){
+    return(
+    <div className = "App">
+    </div>
+  )
+  }
 }
 
 
