@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import './Navbar.scss'
+import bigLogo from '../../assets/img/logo-big.png'
+import smallLogo from '../../assets/img/logo-small.png'
+
 
 import { Layout, Menu } from 'antd'
 import {
@@ -38,11 +41,21 @@ class Navbar extends Component<{}, State> {
     this.setState({ collapsed });
   };
 
+  renderLogo() {
+    if(this.state.collapsed) {
+      return smallLogo;
+    }
+    return bigLogo;
+  }
+
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Router>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+            <div className = "logo">
+              <img alt = "logo" className = "logo-img" src = {this.renderLogo()}></img>
+            </div>
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                 <Menu.Item key="1" icon={<PieChartOutlined />}>
                   <Link to="/">Tasks</Link>
