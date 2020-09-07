@@ -68,7 +68,7 @@ class Navbar extends Component<{}, State> {
                 </Menu.Item>
                 <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
                   <Menu.Item key="4" icon={<TeamOutlined />}>
-                    <Link to="/checking-another">Check another person work</Link>
+                    <Link to="/checking-another">Work of people</Link>
                   </Menu.Item>
                   <Menu.Item key="5" icon={<UserOutlined />}>
                     <Link to="/self-test">Self-test</Link>
