@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import './Navbar.scss';
+import './Navbar.scss'
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd'
 import {
   PieChartOutlined,
   TeamOutlined,
@@ -13,17 +13,23 @@ import {
   SwapOutlined,
   LogoutOutlined,
   /* IssuesCloseOutlined */
-} from '@ant-design/icons';
+} from '@ant-design/icons'
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom"
 
 
-const { Sider } = Layout;
-const { SubMenu } = Menu;
-
+const { Sider } = Layout
+const { SubMenu } = Menu
 interface State {
     collapsed:boolean
 }
 
-class Navbar extends Component {
+class Navbar extends Component<{}, State> {
   state : State = {
     collapsed: false,
   };
@@ -35,32 +41,49 @@ class Navbar extends Component {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" icon={<PieChartOutlined />}>
-              Tasks
-            </Menu.Item>
-            <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
-              Reviews requests
-            </Menu.Item>
-            <Menu.Item key="3" icon={<PlusCircleOutlined />}>
-              Verification request
-            </Menu.Item>
-            <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
-              <Menu.Item key="4" icon={<TeamOutlined />}>Check another person work</Menu.Item>
-              <Menu.Item key="5" icon={<UserOutlined />}>Self-test</Menu.Item>
-            </SubMenu>
-           <Menu.Item key="6" icon={<BarChartOutlined />}>
-              Reviews
-            </Menu.Item>
-            <Menu.Item key="7" icon={<SwapOutlined />}>
-              Cross-check
-            </Menu.Item>
-            <Menu.Item key="8" icon={<LogoutOutlined />}>
-              Exit
-            </Menu.Item>
-          </Menu>
-        </Sider>
+        <Router>
+          <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                <Menu.Item key="1" icon={<PieChartOutlined />}>
+                  <Link to="/">Tasks</Link>
+                </Menu.Item>
+                  <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
+                  <Link to="/reviews-requests">Reviews requests </Link>
+                  </Menu.Item>
+                <Menu.Item key="3" icon={<PlusCircleOutlined />}>
+                  <Link to="/verification-request">Verification request</Link>
+                </Menu.Item>
+                <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
+                  <Menu.Item key="4" icon={<TeamOutlined />}>
+                    <Link to="/checking-another">Check another person work</Link>
+                  </Menu.Item>
+                  <Menu.Item key="5" icon={<UserOutlined />}>
+                    <Link to="/self-test">Self-test</Link>
+                    </Menu.Item>
+                </SubMenu>
+                <Menu.Item key="6" icon={<BarChartOutlined />}>
+                    <Link to="/reviews">Reviews</Link>
+                </Menu.Item>
+                <Menu.Item key="7" icon={<SwapOutlined />}>
+                  <Link to="/cross-check">Cross-check</Link>
+                </Menu.Item>
+                <Menu.Item key="8" icon={<LogoutOutlined />}>
+                  <Link to="/authorization">Exit</Link>
+                </Menu.Item>
+
+              <Switch>
+                <Route path="/reviews-requests"></Route>
+                <Route path="/verification-request"></Route>
+                <Route path="/checking-another"></Route>
+                <Route path="/self-test"></Route>
+                <Route path="/reviews"></Route>
+                <Route path="/cross-check"></Route>
+                <Route path="/authorization"></Route>
+                <Route path="/"></Route>
+              </Switch>
+            </Menu>
+          </Sider>
+        </Router>
       </Layout>
     );
   }
