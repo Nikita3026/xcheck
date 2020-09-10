@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './Navbar.scss'
 import bigLogo from '../../assets/img/logo-big.png'
 import smallLogo from '../../assets/img/logo-small.png'
-
+import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
 
 import { Layout, Menu } from 'antd'
 import {
@@ -32,7 +32,11 @@ interface State {
     collapsed:boolean
 }
 
-class Navbar extends Component<{}, State> {
+interface NavbarProps {
+  history:object
+}
+
+class Navbar extends Component<NavbarProps, State> {
   state : State = {
     collapsed: false,
   };
@@ -58,7 +62,7 @@ class Navbar extends Component<{}, State> {
             </div>
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                 <Menu.Item key="1" icon={<PieChartOutlined />}>
-                  <Link to="/">Tasks</Link>
+                  <Link to="/tasks">Tasks</Link>
                 </Menu.Item>
                   <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
                   <Link to="/reviews-requests">Reviews requests </Link>
@@ -81,7 +85,7 @@ class Navbar extends Component<{}, State> {
                   <Link to="/cross-check">Cross-check</Link>
                 </Menu.Item>
                 <Menu.Item key="8" icon={<LogoutOutlined />}>
-                  <Link to="/authorization">Exit</Link>
+                  <Link to="/">Exit</Link>
                 </Menu.Item>
 
               <Switch>
@@ -91,7 +95,7 @@ class Navbar extends Component<{}, State> {
                 <Route path="/self-test"></Route>
                 <Route path="/reviews"></Route>
                 <Route path="/cross-check"></Route>
-                <Route path="/authorization"></Route>
+                <Route path="/tasks"></Route>
                 <Route path="/"></Route>
               </Switch>
             </Menu>
