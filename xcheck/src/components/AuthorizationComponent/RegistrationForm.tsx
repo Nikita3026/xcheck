@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Authorization.scss';
-import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
-
 import {
     Form,
     Input,
@@ -19,28 +17,17 @@ interface IRegister{
 }
 interface CurrentState {
     login: string|null,
-    role: string|null,
+   /*  role: string|null, */
     password: string|null,
     passwordRepeat: string|null,
-    
-    /* isLoginValid: boolean|null,
-    isPasswordValid: boolean|null,
-    isPasswordRepeatValid: boolean|null,
-    isPasswordsMatch: boolean|null,
-    isFormValid: boolean|null, */
 }
 const { Option } = Select;
 class RegistrationForm extends Component<IRegister, {}> {
     state /* : CurrentState */ = {
         login: '',
-        role: '',
+        /* role: '', */
         password: '',
         passwordRepeat: '',
-        /* isLoginValid: '',
-        isPasswordValid: '',
-        isPasswordRepeatValid: '',
-        isPasswordsMatch: '',
-        isFormValid: '', */
     }
     formItemLayout = {
         labelCol: {
@@ -63,26 +50,31 @@ class RegistrationForm extends Component<IRegister, {}> {
     onFinish = ()=> {
         console.log('Received values of form: ');
     };
-    
+    registrationRequest = async () => {
+        /* let newUser = {
+            'email': 'alex',
+            'password': 'alex'
+        }
+        const userId = await addUser(newUser); */
+    }
     render(){
         return( 
           <Form
             {...this.formItemLayout}
-            /* form={form} */
             name="register"
-            onFinish={this.onFinish}
+            onFinish={this.registrationRequest}
             scrollToFirstError
             className='autorization-container'
           >
             <h1 className='authentification-title'>Registration</h1>
             <div className='input-items'>
                 <Form.Item
-                    name="nickname"
+                    name="github"
                     label={<GithubFilled/>}
                     rules={[
                     {
                         required: true,
-                        message: 'Please input your nickname!',
+                        message: 'Please input your github!',
                         whitespace: true,
                     },
                     ]}
@@ -90,7 +82,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                     <Input placeholder="Input your github" value={this.state.login}/>
                 </Form.Item>
 
-                <Form.Item
+               <Form.Item
                     name="select-multiple"
                     label={<TeamOutlined />}
                     rules={[
@@ -112,8 +104,8 @@ class RegistrationForm extends Component<IRegister, {}> {
                     label={<LockFilled/>}
                     rules={[
                         {
-                        required: true, 
-                        message: 'Please input your password!',
+                          required: true,
+                          message: 'Please input your password!',
                         },
                     ]}
                     hasFeedback
@@ -126,31 +118,31 @@ class RegistrationForm extends Component<IRegister, {}> {
                 dependencies={['password']}
                 hasFeedback
                 rules={[
-                {
-                    required: true,
-                    message: 'Please confirm your password!',
-                },
-                ({ getFieldValue }) => ({
-                    validator(value) {
-                    if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                    }
-
-                    return Promise.reject('The two passwords that you entered do not match!');
+                    {
+                      required: true,
+                      message: 'Please confirm your password!',
                     },
-                }),
-                ]}
-            >
-                <Input.Password placeholder="Confirm your password" value={this.state.passwordRepeat}/>
-            </Form.Item>
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+          
+                        return Promise.reject('The two passwords that you entered do not match!');
+                      },
+                    }),
+                  ]}
+                >
+                    <Input.Password placeholder="Confirm your password" value={this.state.passwordRepeat}/>
+                </Form.Item>
             </div>
             <Form.Item>
                 <Button type="primary" htmlType="submit">
                     Sign up
                 </Button>
-                </Form.Item>
+            </Form.Item>
             <Form.Item>
-                <a className='authorization-transition' onClick={() => this.props.onClick()}>I already have an account</a>
+                <p className='authorization-transition'>I already have an account. <a href='/#' onClick={() => this.props.onClick()}>Sign in</a></p>
             </Form.Item>
           </Form>
         

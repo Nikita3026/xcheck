@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Authorization.scss';
+import {githubAuth} from './AuthConstants'
 import {
     Form,
     Input,
@@ -20,11 +21,6 @@ interface CurrentState {
     role: string|null,
     password: string|null,
      passwordRepeat: string|null,
-/*    isLoginValid: boolean|null,
-    isPasswordValid: boolean|null,
-    isPasswordRepeatValid: boolean|null,
-    isPasswordsMatch: boolean|null,
-    isFormValid: boolean|null, */
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
@@ -33,11 +29,6 @@ class AuthorizationForm extends Component<IAuth, {}>{
         role: '',
         password: '',
         passwordRepeat: '',
-       /*  isLoginValid: '',
-        isPasswordValid: '',
-        isPasswordRepeatValid: '',
-        isPasswordsMatch: '',
-        isFormValid: '', */
     };
     formItemLayout = {
         labelCol: {
@@ -64,7 +55,6 @@ class AuthorizationForm extends Component<IAuth, {}>{
         return( 
           <Form
             {...this.formItemLayout}
-            /* form={form} */
             name="signin"
             onFinish={this.onFinish}
             scrollToFirstError
@@ -73,12 +63,12 @@ class AuthorizationForm extends Component<IAuth, {}>{
             <h1 className='authentification-title'>Authorization</h1>
             <div className='input-items'>
                 <Form.Item
-                    name="nickname"
+                    name="github"
                     label={<GithubFilled/>}
                     rules={[
                     {
                         required: true,
-                        message: 'Please input your nickname!',
+                        message: 'Please input your github!',
                         whitespace: true,
                     },
                     ]}
@@ -122,8 +112,17 @@ class AuthorizationForm extends Component<IAuth, {}>{
                     Sign in
                 </Button>
             </Form.Item>
+            <p className='auth-choise'>Or</p>
             <Form.Item>
-                <a className='authorization-transition' onClick={() => this.props.onClick()}>Sign up</a>
+                <Button type="primary" htmlType="submit">
+                  <a href={githubAuth.githubHref} className='github-href'>
+                    <GithubFilled className='github-icon'/>
+                    Sign up with GitHub
+                  </a>
+                </Button>
+            </Form.Item>
+            <Form.Item>
+                <p className='authorization-transition'>New to X-Check? <a href='/#' onClick={() => this.props.onClick()}>Sign up</a></p>
             </Form.Item>
           </Form>
         
