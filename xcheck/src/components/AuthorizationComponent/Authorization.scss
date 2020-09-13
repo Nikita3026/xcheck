@@ -11,6 +11,11 @@
         text-align: center;
         //color: $font-color;
     }
+    .error-block{
+        color: red;
+        text-align: center;
+        font-size: 18px;
+    }
     .ant-form-item-label > label::after{
         display: inline-block;
         margin-right: 4px;
@@ -43,6 +48,9 @@
     }
     .auth-choise{
         text-align: center;
+    }
+    .select{
+        text-align: left;
     }
 }
 @media (min-width: 576px){

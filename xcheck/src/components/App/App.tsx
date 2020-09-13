@@ -1,5 +1,5 @@
 import React from 'react';
-import StartComponent from './StartComponent'
+import StartComponent from '../AuthorizationComponent/StartComponent'
 export class App extends React.Component<{history:object},{}> {
   render(){
     return(

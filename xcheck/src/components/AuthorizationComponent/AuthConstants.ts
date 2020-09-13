@@ -3,3 +3,4 @@ export const githubAuth ={
     client_id: '36984bd60624ab1ea219',
     client_sercret: 'ce8704e34fa59e158b2b8884f5b69304a34aa27c'
 }
+export const passwordRegExp = /^(?=.*[A-Z])(?=.*[!#-&*-.;:_@?[\]{}])(?=.*[0-9])(?=.*[a-z]).{8,}$/;

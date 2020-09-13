@@ -1,6 +1,6 @@
 import React from 'react';
-import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
-import RegistrationForm from '../AuthorizationComponent/RegistrationForm'
+import AuthorizationForm from './AuthorizationForm'
+import RegistrationForm from './RegistrationForm'
 
 export class StartComponent extends React.Component<{history:object},{currentForm:string}> {
     state={
@@ -18,10 +18,10 @@ export class StartComponent extends React.Component<{history:object},{currentFor
         return(
             <div className = "start">
                 {(this.state.currentForm === 'auth')
-                    ?<RegistrationForm 
+                    ?<AuthorizationForm 
                         history = {this.props.history}
                         onClick={this.changeCurrentForm}/>
-                    :<AuthorizationForm 
+                    :<RegistrationForm 
                         history = {this.props.history}
                         onClick={this.changeCurrentForm}/>
                 }
