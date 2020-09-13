@@ -19,9 +19,6 @@ import {
 } from '@ant-design/icons'
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link
 } from "react-router-dom"
 
@@ -51,7 +48,6 @@ class Navbar extends Component<{}, State> {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Router>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <div className = "logo">
               <img alt = "logo" className = "logo-img" src = {this.renderLogo()}></img>
@@ -83,20 +79,8 @@ class Navbar extends Component<{}, State> {
                 <Menu.Item key="8" icon={<LogoutOutlined />}>
                   <Link to="/authorization">Exit</Link>
                 </Menu.Item>
-
-              <Switch>
-                <Route path="/reviews-requests"></Route>
-                <Route path="/verification-request"></Route>
-                <Route path="/checking-another"></Route>
-                <Route path="/self-test"></Route>
-                <Route path="/reviews"></Route>
-                <Route path="/cross-check"></Route>
-                <Route path="/authorization"></Route>
-                <Route path="/"></Route>
-              </Switch>
             </Menu>
           </Sider>
-        </Router>
       </Layout>
     );
   }
