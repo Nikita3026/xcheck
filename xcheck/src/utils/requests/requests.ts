@@ -37,7 +37,16 @@ class Requests {
             console.log('Error when requesting the server');
             return null;
         }
+    }
 
+    async getDataByParameter(essenceName:string, parameterName:string, parameterValue:string|number) : Promise<any>{
+        try{
+            const res = await this.getRequest(`${essenceName}?${parameterName}=${parameterValue}`);
+            return res.data;
+        } catch(error) {
+            console.log('Error when requesting the server');
+            return null;
+        }
     }
 
     async addData(essenceName:string, data:object) : Promise<any>{

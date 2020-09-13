@@ -1,13 +1,14 @@
-import React from 'react'
-import Router from '../Router/Router'
+import React from 'react';
+import StartComponent from '../AuthorizationComponent/StartComponent'
 
-export class App extends React.Component<{},{}> {
+export class App extends React.Component<{history:object},{}> {
   render(){
     return(
     <div className = "App">
-      <Router/>
+      <StartComponent
+      history = {this.props.history}/>
     </div>
-  )
+    )
   }
 }
 
