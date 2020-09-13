@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import './Navbar.scss'
 import bigLogo from '../../assets/img/logo-big.png'
 import smallLogo from '../../assets/img/logo-small.png'
+import CreateTaskForm from '../TasksPage/CreateTaskForm/CreateTaskForm'
 
 
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Breadcrumb } from 'antd'
 import {
   PieChartOutlined,
   TeamOutlined,
@@ -26,7 +27,7 @@ import {
 } from "react-router-dom"
 
 
-const { Sider } = Layout
+const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu
 interface State {
     collapsed:boolean
@@ -96,6 +97,15 @@ class Navbar extends Component<{}, State> {
               </Switch>
             </Menu>
           </Sider>
+          <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }}></Header>
+          <Content style={{ margin: '16px 16px' }}>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              {this.props.children}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        </Layout>
         </Router>
       </Layout>
     );

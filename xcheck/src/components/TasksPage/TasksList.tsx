@@ -1,48 +1,66 @@
-import React from 'react';
-import { List, Avatar, Button, Skeleton } from 'antd';
+import React from 'react'
+import { List, Avatar, Button, Skeleton } from 'antd'
+import Requests from '../../utils/requests/requests'
+import API from '../../utils/API'
 
-/* import reqwest from 'reqwest'; */
+/*const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`; */
 
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
+interface State {
+  initLoading: boolean,
+  loading: boolean,
+  data: Array<{}>,
+  list: Array<{}>
+}
 
-class TasksList extends React.Component {
+interface taskObject {
+  id:string,
+  author:string,
+  state:string,
+  categoriesOrder:Array<string>,
+  items:Array<object>
+}
+
+class TasksList extends React.Component<{}, State> {
+  count:number = 3;
+
   state = {
     initLoading: true,
     loading: false,
-    data: [],
-    list: [],
+    data:  [],
+    list:  []
   };
 
- /*  componentDidMount() {
-    this.getData(res => {
+  componentDidMount() : void {
+    this.getData((res: Array<{}>) => {
       this.setState({
         initLoading: false,
-        data: res.results,
-        list: res.results,
-      });
+        data: res,
+        list: res
+      })
     });
   }
 
-  getData = callback => {
-    reqwest({
-      url: fakeDataUrl,
-      type: 'json',
-      method: 'get',
-      contentType: 'application/json',
-      success: res => {
-        callback(res);
-      },
-    });
-  }; */
+  async getData(callback : Function) : Promise<any>{
+    const res = await API.get('tasks');
+    callback(res.data);
+  };
 
- /*  onLoadMore = () => {
+  onLoadMore():void{
+    const listAdditional : Array<{}> = [...new Array(this.count)].map(() => ({ loading: true, name: {} }));
+    const newList : Array<{}> = this.state.data;
+    listAdditional.map((item:object) => {
+      newList.push(item);
+    });
     this.setState({
       loading: true,
-      list: this.state.data.concat([...new Array(count)].map(() => ({ loading: true, name: {} }))),
+      list: newList
     });
-    this.getData(res => {
-      const data = this.state.data.concat(res.results);
+    this.getData((res : Array<{}>) => {
+      const tempData: Array<{}> = this.state.data;
+      res.map((item:object) => {
+        tempData.push(item);
+      })
+      const data = tempData;
       this.setState(
         {
           data,
@@ -57,7 +75,7 @@ class TasksList extends React.Component {
         },
       );
     });
-  }; */
+  };
 
   render() {
     const { initLoading, loading, list } = this.state;
@@ -71,7 +89,7 @@ class TasksList extends React.Component {
             lineHeight: '32px',
           }}
         >
-          <Button /* onClick={this.onLoadMore} */>loading more</Button>
+          <Button onClick={() =>this.onLoadMore()}>loading more</Button>
         </div>
       ) : null;
 
@@ -82,16 +100,16 @@ class TasksList extends React.Component {
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
-        renderItem={item => (
+        renderItem={(item:taskObject) =>(
           <List.Item
             actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
           >
-            <Skeleton avatar title={false} /* loading={item.loading} */ active>
+            <Skeleton avatar title={false} loading={this.state.loading} active>
               <List.Item.Meta
                 avatar={
                   <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                 }
-                title={<a href="https://ant.design">{/* {item.name.last} */}</a>}
+                title={<a href="https://ant.design">{item.id}</a>}
                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
               />
               <div>content</div>
