@@ -21,7 +21,7 @@ import {
   Link
 } from "react-router-dom"
 
-import Request from '../../utils/requests/requests'
+import Requests from '../../utils/requests/requests'
 
 
 const { Header, Content, Footer, Sider } = Layout
@@ -51,6 +51,50 @@ class Navbar extends Component<NavbarProps, State> {
     return bigLogo;
   }
  
+  handleClick = () => {
+    const temp = new Requests();
+    for(let i = 2; i<8; i++) {
+      temp.addData('tasks', 
+      {
+        "id": `simple-task-v${i}`,
+        "author": "cardamo",
+        "state": "DRAFT",
+        "categoriesOrder": [
+          "Basic Scope",
+          "Extra Scope",
+          "Fines"
+        ],
+        "items": [
+          {
+            "id": "basic_p1",
+            "minScore": 0,
+            "maxScore": 20,
+            "category": "Basic Scope",
+            "title": "Basic things",
+            "description": "You need to make things right, not wrong"
+          },
+          {
+            "id": "extra_p1",
+            "minScore": 0,
+            "maxScore": 30,
+            "category": "Extra Scope",
+            "title": "More awesome things",
+            "description": "Be creative and make up some more awesome things"
+          },
+          {
+            "id": "fines_p1",
+            "minScore": -10,
+            "maxScore": 0,
+            "category": "Fines",
+            "title": "App crashes",
+            "description": "App causes BSoD!"
+          }
+        ]
+      }
+    );
+    }
+  }
+
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -97,13 +141,14 @@ class Navbar extends Component<NavbarProps, State> {
       textTransform:'capitalize'
       }}>
         {this.props.pageName}
+        <button onClick = {this.handleClick}></button>
       </Header>
           <Content style={{ margin: '16px 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
               {this.props.children}
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>RSS React 2020Q3 ©2020 Created by Team 31</Footer>
         </Layout>
       </Layout>
     );

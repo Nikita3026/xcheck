@@ -5,11 +5,12 @@ import API from '../../utils/API'
 import {
   AimOutlined,
   CarryOutOutlined,
-  EditOutlined
+  EditOutlined,
+  SearchOutlined,
+  PlusOutlined
 } from '@ant-design/icons'
 import './TasksList.scss'
 
-/*const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`; */
 
 interface State {
   initLoading: boolean,
@@ -94,13 +95,17 @@ class TasksList extends React.Component<{}, State> {
       !initLoading && !loading ? (
         <div
           style={{
-            textAlign: 'center',
-            marginTop: 12,
+            marginTop: 40,
             height: 32,
             lineHeight: '32px',
+            display:'flex',
+            justifyContent:'space-between'
           }}
         >
-          <Button onClick={() =>this.onLoadMore()}>loading more</Button>
+          <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+            Add
+         </Button>
+          <Button className = "loading-more-button" onClick={() =>this.onLoadMore()}>Loading more</Button>
         </div>
       ) : null;
 
@@ -113,7 +118,7 @@ class TasksList extends React.Component<{}, State> {
         dataSource={list}
         renderItem={(item:taskObject) =>(
           <List.Item
-            actions={[<a key="list-loadmore-edit"><EditOutlined /></a>, <a key="list-loadmore-more">more</a>]}
+            actions={[<a className = "additional-link change" key="list-loadmore-edit"><EditOutlined /></a>, <a className = "additional-link more" key="list-loadmore-more">More</a>]}
           >
             <Skeleton avatar title={false} loading={this.state.loading} active>
               <List.Item.Meta
@@ -122,7 +127,9 @@ class TasksList extends React.Component<{}, State> {
             </Skeleton>
           </List.Item>
         )}
-      />
+      >
+     
+      </List>
     );
   }
 }
