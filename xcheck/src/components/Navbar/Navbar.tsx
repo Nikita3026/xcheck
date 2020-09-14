@@ -50,50 +50,6 @@ class Navbar extends Component<NavbarProps, State> {
     }
     return bigLogo;
   }
- 
-  handleClick = () => {
-    const temp = new Requests();
-    for(let i = 2; i<8; i++) {
-      temp.addData('tasks', 
-      {
-        "id": `simple-task-v${i}`,
-        "author": "cardamo",
-        "state": "DRAFT",
-        "categoriesOrder": [
-          "Basic Scope",
-          "Extra Scope",
-          "Fines"
-        ],
-        "items": [
-          {
-            "id": "basic_p1",
-            "minScore": 0,
-            "maxScore": 20,
-            "category": "Basic Scope",
-            "title": "Basic things",
-            "description": "You need to make things right, not wrong"
-          },
-          {
-            "id": "extra_p1",
-            "minScore": 0,
-            "maxScore": 30,
-            "category": "Extra Scope",
-            "title": "More awesome things",
-            "description": "Be creative and make up some more awesome things"
-          },
-          {
-            "id": "fines_p1",
-            "minScore": -10,
-            "maxScore": 0,
-            "category": "Fines",
-            "title": "App crashes",
-            "description": "App causes BSoD!"
-          }
-        ]
-      }
-    );
-    }
-  }
 
   render() {
     return (
@@ -132,7 +88,7 @@ class Navbar extends Component<NavbarProps, State> {
             </Menu>
           </Sider>
           <Layout className="site-layout">
-    <Header className="site-layout-background" style={{ 
+    <Header className="site-layout-background" style={{
       padding: 0,
       fontSize:'40px',
       display:'flex',
@@ -141,7 +97,6 @@ class Navbar extends Component<NavbarProps, State> {
       textTransform:'capitalize'
       }}>
         {this.props.pageName}
-        <button onClick = {this.handleClick}></button>
       </Header>
           <Content style={{ margin: '16px 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>

@@ -20,6 +20,7 @@
     }
 }
 
+
 .ant-list-item-action li a{
     font-size:18px;
 }
@@ -47,5 +48,11 @@
 .additional-link.more{
     &:hover{
         font-size:19px;
+    }
+}
+
+.tasks-name{
+    &:hover{
+        color:$font-color !important;
     }
 }

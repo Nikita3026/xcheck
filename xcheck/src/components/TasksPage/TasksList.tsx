@@ -3,7 +3,6 @@ import { List, Avatar, Button, Skeleton } from 'antd'
 import Requests from '../../utils/requests/requests'
 import API from '../../utils/API'
 import {
-  AimOutlined,
   CarryOutOutlined,
   EditOutlined,
   SearchOutlined,
@@ -17,7 +16,8 @@ interface State {
   loading: boolean,
   data: Array<{}>,
   list: Array<{}>,
-  numberOfTasksAtPage:number
+  numberOfTasksAtPage:number,
+  isTasksExist:boolean
 }
 
 interface taskObject {
@@ -36,7 +36,8 @@ class TasksList extends React.Component<{}, State> {
     loading: false,
     data:  [],
     list:  [],
-    numberOfTasksAtPage:0
+    numberOfTasksAtPage:0,
+    isTasksExist:true
   };
 
   changeNumberOfTasksAtPage =(newNumber:number):void =>{
@@ -61,7 +62,13 @@ class TasksList extends React.Component<{}, State> {
 
   async getData(callback : Function) : Promise<any>{
     const res = await API.get('tasks');
-    callback(res.data);
+    if(res.data.length === 0) {
+      this.setState({
+        isTasksExist:false
+      })
+    } else {
+      callback(res.data);
+    }
   };
 
   onLoadMore():void{
@@ -80,9 +87,6 @@ class TasksList extends React.Component<{}, State> {
           loading: false,
         },
         () => {
-          // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-          // In real scene, you can using public method of react-virtualized:
-          // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
           window.dispatchEvent(new Event('resize'));
         },
       );
@@ -109,6 +113,13 @@ class TasksList extends React.Component<{}, State> {
         </div>
       ) : null;
 
+
+    if(!this.state.isTasksExist) return (
+      <div className = "empty-tasks-list-message">
+        <span>You do not have created tasks, try adding them by clicking on the add button...</span>
+        {loadMore}
+      </div>
+    );
     return (
       <List
         className="demo-loadmore-list"
@@ -123,13 +134,11 @@ class TasksList extends React.Component<{}, State> {
             <Skeleton avatar title={false} loading={this.state.loading} active>
               <List.Item.Meta
                 avatar={<CarryOutOutlined />}
-                title={<a href="https://ant.design">{item.id}</a>}/>
+                title={<a className = "tasks-name" href="https://ant.design">{item.id}</a>}/>
             </Skeleton>
           </List.Item>
         )}
-      >
-     
-      </List>
+      />
     );
   }
 }
