@@ -1,0 +1,20 @@
+@import '../../styles/values.scss';
+
+
+
+.ant-list-item-meta{
+    align-items:center;
+    .ant-list-item-meta-avatar{
+        font-size:25px;
+        margin-right:20px;
+    }
+    .ant-list-item-meta-title{
+        text-transform:capitalize;
+        margin-top:0.2rem;
+        font-size:18px;
+    }
+    
+}
+.ant-list-item-action li a{
+    font-size:18px;
+}

@@ -6,7 +6,7 @@ import {
   } from "react-router-dom"
 import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
 import RegistrationForm from '../AuthorizationComponent/RegistrationForm'
-import Navbar from '../Navbar/Navbar'
+import TasksPage from '../TasksPage/TasksPage'
 
 interface Props {
     history:object
@@ -25,11 +25,10 @@ export class Router extends Component<Props, {}> {
                         <Route path="/reviews"></Route>
                         <Route path="/cross-check"></Route>
                         <Route path="/registration">
-                            <RegistrationForm history = {this.props.history}
-                         />
+                            <RegistrationForm history = {this.props.history}/>
                         </Route>
                         <Route path="/tasks">
-                            <Navbar history = {this.props.history}/>
+                            <TasksPage history = {this.props.history}/>
                         </Route>
                         <Route exact path="/">
                              <AuthorizationForm history = {this.props.history}/>
