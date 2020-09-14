@@ -7,7 +7,7 @@ import {
 import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
 import RegistrationForm from '../AuthorizationComponent/RegistrationForm'
 import Navbar from '../Navbar/Navbar'
-import Reviews from '../Reviews/Reviews'
+import ReviewsPage from '../Reviews/ReviewsPage'
 interface Props {
     history:object
 }
@@ -23,7 +23,7 @@ export class Router extends Component<Props, {}> {
                         <Route path="/checking-another"></Route>
                         <Route path="/self-test"></Route>
                         <Route path="/reviews">
-                            <Reviews history={this.props.history}></Reviews>
+                            <ReviewsPage history={this.props.history}></ReviewsPage>
                         </Route>
                         <Route path="/cross-check"></Route>
                         <Route path="/registration">
