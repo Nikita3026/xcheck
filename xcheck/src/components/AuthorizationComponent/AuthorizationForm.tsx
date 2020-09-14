@@ -30,7 +30,7 @@ interface CurrentState {
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
-    state/*  : CurrentState */ = {
+    state= {
       login: '',
       role: [],
       password: '',
