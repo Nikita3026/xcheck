@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import './Navbar.scss'
 import bigLogo from '../../assets/img/logo-big.png'
 import smallLogo from '../../assets/img/logo-small.png'
-import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
 
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Breadcrumb } from 'antd'
 import {
   PieChartOutlined,
   TeamOutlined,
@@ -22,15 +21,18 @@ import {
   Link
 } from "react-router-dom"
 
+import Requests from '../../utils/requests/requests'
 
-const { Sider } = Layout
+
+const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu
 interface State {
     collapsed:boolean
 }
 
 interface NavbarProps {
-  history:object
+  history:object,
+  pageName:string
 }
 
 class Navbar extends Component<NavbarProps, State> {
@@ -85,6 +87,24 @@ class Navbar extends Component<NavbarProps, State> {
                 </Menu.Item>
             </Menu>
           </Sider>
+          <Layout className="site-layout">
+    <Header className="site-layout-background" style={{
+      padding: 0,
+      fontSize:'40px',
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      textTransform:'capitalize'
+      }}>
+        {this.props.pageName}
+      </Header>
+          <Content style={{ margin: '16px 16px' }}>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              {this.props.children}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>RSS React 2020Q3 ©2020 Created by Team 31</Footer>
+        </Layout>
       </Layout>
     );
   }
