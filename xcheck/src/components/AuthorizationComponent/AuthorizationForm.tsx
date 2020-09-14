@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom"
+import { Redirect } from "react-router-dom"
 import './Authorization.scss';
 import { githubAuth } from './AuthConstants'
 import { passwordRegExp } from './AuthConstants'
-import Requests from '../../utils/requests/requests' 
+import Requests from '../../utils/requests/requests'
 import { SelectValue } from 'antd/lib/select';
+import {Link} from 'react-router-dom';
 import {
   Form,
   Input,
@@ -18,29 +19,30 @@ import {
 } from '@ant-design/icons';
 
 interface IAuth{
-    history:object,
-    onClick: Function
+    history:object
 }
 interface CurrentState {
     login: string|null,
     role: string|null,
     password: string|null,
     passwordRepeat: string|null,
+    isAuthorizationEnd:boolean
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
-    state/*  : CurrentState */ = {
+    state= {
       login: '',
       role: [],
       password: '',
       passwordRepeat: '',
-      error: ''
+      error: '',
+      isAuthorizationEnd:false
     };
     formItemLayout = {
         labelCol: {
           xs: {
             span: 24,
-          },   
+          },
           sm: {
             span: 6,
           },
@@ -57,21 +59,23 @@ class AuthorizationForm extends Component<IAuth, {}>{
     onFinish = async () : Promise<any>=> {
       const regRequest = new Requests();
       const data = await regRequest.getDataByParameter('users', 'githubId', this.state.login)
-      if(data.length === 0) 
+      if(data.length === 0)
         this.setState({error: "Account doesn't exists"});
-      else 
-        if(data[0].password !== this.state.password)
-          this.setState({error: "Password isn't correct"})
-         /*  else <Link to={'/tasks'}></Link> */
+      else {
+        if(data[0].password !== this.state.password) this.setState({error: "Password isn't correct"});
+        else this.setState({isAuthorizationEnd: true});
+      }
     };
     inputHandler = (event : React.ChangeEvent<HTMLInputElement>) : void => {
       this.setState({[event.target.name]: event.target.value});
     }
     selectHandler = (event : SelectValue) => {
       this.setState({role: event});
-    } 
+    }
+
     render(){
-        return( 
+      if(this.state.isAuthorizationEnd) return <Redirect to='/tasks'/>
+        return(
           <Form
             {...this.formItemLayout}
             name="signin"
@@ -94,7 +98,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                     },
                     ]}
                 >
-                    <Input placeholder="Input your github" 
+                    <Input placeholder="Input your github"
                       value={this.state.login}
                       name="login"
                       onChange={this.inputHandler}/>
@@ -111,7 +115,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                     },
                     ]}
                 >
-                    <Select placeholder="Please select your role" 
+                    <Select placeholder="Please select your role"
                       className='select'
                       onChange={ e => this.selectHandler(e) }>
                         <Option value="author" >Author</Option>
@@ -124,7 +128,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                     label={<LockFilled/>}
                     rules={[
                       {
-                      required: true, 
+                      required: true,
                       message: 'Please input your password!',
                       },
                       ({ getFieldValue }) => ({
@@ -139,7 +143,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                     ]}
                     hasFeedback
                 >
-                    <Input.Password placeholder="Input your password" 
+                    <Input.Password placeholder="Input your password"
                       value={this.state.password}
                       name="password"
                       onChange={this.inputHandler}/>
@@ -160,10 +164,9 @@ class AuthorizationForm extends Component<IAuth, {}>{
                 </Button>
             </Form.Item>
             <Form.Item>
-                <p className='authorization-transition'>New to X-Check? <a href='/#' onClick={() => this.props.onClick()}>Sign up</a></p>
+                <p className='authorization-transition'>New to X-Check? <Link to='/registration'>Sign up</Link></p>
             </Form.Item>
           </Form>
-        
         );
     }
 }

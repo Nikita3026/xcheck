@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Authorization.scss';
-import Requests from '../../utils/requests/requests' 
+import Requests from '../../utils/requests/requests'
 import { passwordRegExp } from './AuthConstants'
+import {Link, Redirect} from 'react-router-dom';
 import {
     Form,
     Input,
@@ -16,14 +17,14 @@ import {
 import { SelectAllLabel } from 'antd/lib/transfer';
 interface IRegister{
     history:object
-    onClick: Function
 }
 interface CurrentState {
     login: string|null,
     role: string|null,
     password: string|null,
     passwordRepeat: string|null,
-    error: string|null
+    error: string|null,
+    isRegistrationEnd:boolean
 }
 const { Option } = Select;
 class RegistrationForm extends Component<IRegister, {}> {
@@ -32,7 +33,8 @@ class RegistrationForm extends Component<IRegister, {}> {
       role: 'Student',
       password: '',
       passwordRepeat: '',
-      error: ''
+      error: '',
+      isRegistrationEnd:false
     }
     formItemLayout = {
         labelCol: {
@@ -56,8 +58,11 @@ class RegistrationForm extends Component<IRegister, {}> {
       const isloginunic = await this.isAccountUnic();
       if (isloginunic === 0) this.registrationRequest();
       else {
-        this.setState({error: 'Account already exists'});
-        this.props.onClick();
+        this.setState(
+          {
+            error: 'Account already exists',
+            isRegistrationEnd:true
+          });
       }
     };
     registrationRequest = async () : Promise<any>=> {
@@ -67,7 +72,10 @@ class RegistrationForm extends Component<IRegister, {}> {
         'roles': [this.state.role],
         'password': this.state.password
       })
-      this.props.onClick()
+      this.setState(
+        {
+          isRegistrationEnd:true
+        });
     }
     isAccountUnic = async () : Promise<any>=> {
       const qwerty = new Requests();
@@ -76,12 +84,13 @@ class RegistrationForm extends Component<IRegister, {}> {
     }
     inputHandler = (event : React.ChangeEvent<HTMLInputElement>) : void => {
       this.setState({[event.target.name]: event.target.value});
-    } 
+    }
     selectHandler = (event : SelectAllLabel) => {
       this.setState({role: event});
-    } 
+    }
     render(){
-        return( 
+      if(this.state.isRegistrationEnd) return <Redirect to='/'/>
+        return(
           <Form
             {...this.formItemLayout}
             name="register"
@@ -103,7 +112,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                     },
                     ]}
                 >
-                    <Input placeholder="Input your github" 
+                    <Input placeholder="Input your github"
                       value={this.state.login}
                       name="login"
                       onChange={this.inputHandler}/>
@@ -121,7 +130,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                     ]}
                 >
                   <Select mode="multiple"
-                    className='select' 
+                    className='select'
                     placeholder="Please select your role"
                     onChange={ e => this.selectHandler(e) }>
                       <Option value="author" >Author</Option>
@@ -149,10 +158,10 @@ class RegistrationForm extends Component<IRegister, {}> {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password 
-                      placeholder="Input your password" 
+                    <Input.Password
+                      placeholder="Input your password"
                       name="password"
-                      value={this.state.password} 
+                      value={this.state.password}
                       onChange={this.inputHandler}/>
                 </Form.Item>
                 <Form.Item
@@ -179,14 +188,14 @@ class RegistrationForm extends Component<IRegister, {}> {
                         if (!value || getFieldValue('password') === value) {
                           return Promise.resolve();
                         }
-          
+
                         return Promise.reject('The two passwords that you entered do not match!');
                       },
                     }),
                   ]}
                 >
-                    <Input.Password 
-                      placeholder="Confirm your password" 
+                    <Input.Password
+                      placeholder="Confirm your password"
                       name="passwordRepeat"
                       onChange={this.inputHandler}
                       value={this.state.passwordRepeat}/>
@@ -198,10 +207,9 @@ class RegistrationForm extends Component<IRegister, {}> {
                 </Button>
             </Form.Item>
             <Form.Item>
-                <p className='authorization-transition'>I already have an account. <a href='/#' onClick={() => this.props.onClick()}>Sign in</a></p>
+                <p className='authorization-transition'>I already have an account. <Link to="/">Sign in</Link></p>
             </Form.Item>
           </Form>
-        
         );
     }
 }
