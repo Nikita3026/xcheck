@@ -9,24 +9,35 @@ const data: User[] = [
       task: 'SongBird',
       score: 32,
       deadline: '2020-09-01',
+      author: 'Dad'
     },
     {
       key: 2,
       task: 'English for kids',
       score: 42,
       deadline: '2020-06-10',
+      author: 'Mom'
     },
     {
       key: 3,
       task: 'Xcheck',
       score: 23,
       deadline: '2020-09-22',
+      author: 'Dog'
     },
     {
       key: 4,
       task: 'Fancy weather',
       score: 102,
       deadline: '2020-06-31',
+      author: 'Son'
+    },
+    {
+      key: 5,
+      task: 'SangBird',
+      score: 32,
+      deadline: '2020-09-01',
+      author: 'Dream'
     },
   ];
   interface User {
@@ -34,6 +45,7 @@ const data: User[] = [
     task: string;
     score: number;
     deadline: string;
+    author: string;
   }
   class Reviews extends React.Component<{},{}> {
     state = {
@@ -45,14 +57,18 @@ const data: User[] = [
       const reviewRequest = new Requests();
       const data = await reviewRequest.getRequest('tasks')
     }; 
+    sortByAlphabet = (a:string, b:string) => {
+      if ( a < b ) return -1;
+      if ( b < a ) return 1;
+      return 0;
+    }
     render() {
       return (
         <Table<User> dataSource={data}>
             <Table.Column key="task" 
                 title="Task" 
                 dataIndex="task"     
-                //{this.getColumnSearchProps('name')}
-                //sorter={(str: any) => {str.task.split('').sort().join()}}
+                sorter={(a:{task:string},b:{task:string}) => this.sortByAlphabet(a.task,b.task)}
                 />
             <Table.Column key="score" 
                 title="Score" 
@@ -61,7 +77,11 @@ const data: User[] = [
             <Table.Column key="deadline" 
                 title="Deadline" 
                 dataIndex="deadline"
-                sorter={(a:any, b:any) => a.score - b.score} />
+                sorter={(a:any, b:any) => a.deadline - b.deadline} />
+            <Table.Column key="author" 
+                title="Author" 
+                dataIndex="author"
+                sorter={(a:{author:string},b:{author:string}) => this.sortByAlphabet(a.author,b.author)}/>
         </Table>
       );
     }

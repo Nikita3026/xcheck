@@ -1,7 +1,13 @@
+@import '../../styles/values.scss';
+
 .reviews-page-container{
-    .ant-spin-container{
-        .ant-table-pagination.ant-pagination{
-            display: none;
-        }
+    .ant-table-pagination.ant-pagination{
+        display: none;
+    }
+    .ant-table-thead > tr > th{
+        background-color: $font-color;
+    }
+    .ant-table-thead th.ant-table-column-has-sorters:hover{
+         background-color: $background-color;
     }
 }

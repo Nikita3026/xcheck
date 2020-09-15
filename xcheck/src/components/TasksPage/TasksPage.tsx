@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
 import Navbar from '../Navbar/Navbar'
-import Reviews from './Reviews'
+import TasksList from './TasksList'
+
 interface Props {
     history:object
 }
 
-export class ReviewsPage extends Component<Props,{}> {
+export class TasksPage extends Component<Props,{}> {
     render() {
         return (
-            <div className = "reviews-page-container">
+            <div className = "tasks-page-container">
                 <Navbar 
                 history = {this.props.history}
-                pageName = 'reviews'
+                pageName = 'tasks'
                 >
-                    <Reviews/>
+                    <TasksList/>
                 </Navbar>
             </div>
         )
     }
-}   
+}
 
-export default ReviewsPage
+export default TasksPage
