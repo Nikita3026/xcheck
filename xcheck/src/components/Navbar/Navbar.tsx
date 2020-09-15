@@ -3,8 +3,7 @@ import './Navbar.scss'
 import bigLogo from '../../assets/img/logo-big.png'
 import smallLogo from '../../assets/img/logo-small.png'
 
-
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Breadcrumb } from 'antd'
 import {
   PieChartOutlined,
   TeamOutlined,
@@ -19,20 +18,24 @@ import {
 } from '@ant-design/icons'
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link
 } from "react-router-dom"
 
+import Requests from '../../utils/requests/requests'
 
-const { Sider } = Layout
+
+const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu
 interface State {
     collapsed:boolean
 }
 
-class Navbar extends Component<{}, State> {
+interface NavbarProps {
+  history:object,
+  pageName:string
+}
+
+class Navbar extends Component<NavbarProps, State> {
   state : State = {
     collapsed: false,
   };
@@ -51,14 +54,13 @@ class Navbar extends Component<{}, State> {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Router>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <div className = "logo">
               <img alt = "logo" className = "logo-img" src = {this.renderLogo()}></img>
             </div>
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                 <Menu.Item key="1" icon={<PieChartOutlined />}>
-                  <Link to="/">Tasks</Link>
+                  <Link to="/tasks">Tasks</Link>
                 </Menu.Item>
                   <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
                   <Link to="/reviews-requests">Reviews requests </Link>
@@ -81,22 +83,28 @@ class Navbar extends Component<{}, State> {
                   <Link to="/cross-check">Cross-check</Link>
                 </Menu.Item>
                 <Menu.Item key="8" icon={<LogoutOutlined />}>
-                  <Link to="/authorization">Exit</Link>
+                  <Link to="/">Exit</Link>
                 </Menu.Item>
-
-              <Switch>
-                <Route path="/reviews-requests"></Route>
-                <Route path="/verification-request"></Route>
-                <Route path="/checking-another"></Route>
-                <Route path="/self-test"></Route>
-                <Route path="/reviews"></Route>
-                <Route path="/cross-check"></Route>
-                <Route path="/authorization"></Route>
-                <Route path="/"></Route>
-              </Switch>
             </Menu>
           </Sider>
-        </Router>
+          <Layout className="site-layout">
+    <Header className="site-layout-background" style={{
+      padding: 0,
+      fontSize:'40px',
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      textTransform:'capitalize'
+      }}>
+        {this.props.pageName}
+      </Header>
+          <Content style={{ margin: '16px 16px' }}>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              {this.props.children}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>RSS React 2020Q3 ©2020 Created by Team 31</Footer>
+        </Layout>
       </Layout>
     );
   }

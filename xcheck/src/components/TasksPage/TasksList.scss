@@ -1,0 +1,58 @@
+@import '../../styles/values.scss';
+
+
+
+.ant-list-item-meta{
+    align-items:center;
+    .ant-list-item-meta-avatar{
+        font-size:25px;
+        margin-right:20px;
+    }
+    .ant-list-item-meta-title{
+        text-transform:capitalize;
+        margin-top:0.2rem;
+        font-size:18px;
+    }
+    .ant-list-item-meta-content{
+        &:hover{
+            color:$font-color;
+        }
+    }
+}
+
+
+.ant-list-item-action li a{
+    font-size:18px;
+}
+
+.add-button,
+.loading-more-button{
+    color:white;
+    background-color: $background-color;
+    border-color: $background-color;
+    &:hover{
+        color:white;
+        background-color:$font-color;
+        border-color:$font-color;
+    }
+}
+
+.additional-link{
+    color:$font-color;
+    &:hover{
+        color:$background-color;
+    }
+}
+
+.additional-link.change,
+.additional-link.more{
+    &:hover{
+        font-size:19px;
+    }
+}
+
+.tasks-name{
+    &:hover{
+        color:$font-color !important;
+    }
+}
