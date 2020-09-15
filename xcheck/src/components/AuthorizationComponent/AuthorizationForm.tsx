@@ -57,14 +57,17 @@ class AuthorizationForm extends Component<IAuth, {}>{
         },
     };
     onFinish = async () : Promise<any>=> {
-      const regRequest = new Requests();
+      const regRequest = new Requests();  
       const data = await regRequest.getDataByParameter('users', 'githubId', this.state.login)
       if(data.length === 0)
         this.setState({error: "Account doesn't exists"});
-      else {
-        if(data[0].password !== this.state.password) this.setState({error: "Password isn't correct"});
-        else this.setState({isAuthorizationEnd: true});
-      }
+      else if (data[0].password !== this.state.password) this.setState({error: "Password isn't correct"});
+           else if (!data[0].roles[0].includes(this.state.role)) this.setState({error: "Role isn't correct"});
+                else {
+                  localStorage.login = this.state.login;
+                  localStorage.role = this.state.role;
+                  this.setState({isAuthorizationEnd: true});
+                }
     };
     inputHandler = (event : React.ChangeEvent<HTMLInputElement>) : void => {
       this.setState({[event.target.name]: event.target.value});
