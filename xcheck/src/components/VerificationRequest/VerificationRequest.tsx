@@ -1,44 +1,77 @@
-import React, { Component } from "react";
-import { Form, Input, Button, Select } from 'antd';
+import React, {Component} from "react"
+import {Form, Input, Button, Select, Spin} from 'antd'
+import Requests from "../../utils/requests/requests"
 import './verificationRequest.scss'
 
 
-const {Option} = Select;
+const {Option} = Select
 
 interface State {
-  options: string[],
-  isChosen: boolean,
-  task: string | null,
-  pull_request: string,
+  options: taskObject[]
+  isChosen: boolean
+  task: string | null
+  author: string | null
+  pull_request: string
   demo: string
+  isLoading: boolean
+}
+
+interface taskObject {
+  id:string,
+  author:string,
+  state:string,
 }
 
 class VerificationRequest extends Component<{}, State> {
   state: State = {
-    options: ['Songbird', 'X Check App', 'schedule'],
+    options: [],
     isChosen: false,
     task: null,
+    author: null,
     pull_request: '',
-    demo: ''
+    demo: '',
+    isLoading: false
+  }
+
+  requests = new Requests()
+
+  componentDidMount = async () => {
+    this.setState({isLoading: true})
+    const res = await this.requests.getRequest('tasks')
+    const data = await res.data
+    this.setState({
+      options: data,
+      isLoading: false
+    })
   }
 
   handleSelectChange = (value: string) => {
-    this.setState(prev => ({...prev, isChosen: true, task: value}))
-  };
+    const chosenTask = this.state.options.find(option => option.id === value)
+    if (chosenTask){
+      this.setState({
+        isChosen: true,
+        task: chosenTask.id,
+        author: chosenTask.author
+      })
+    }
+  }
   handlePrChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({pull_request: evt.target.value})
-  };
+  }
   handleDemoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({demo: evt.target.value})
-  };
+  }
   handleFinish = () => {
-    console.log(JSON.stringify(this.state))
-  };
+    console.log(this.state)
+  }
 
   render() {
+    if (this.state.isLoading){
+      return <div className="spin-wrapper"><Spin /></div>
+    }
+
     return (
       <Form layout="vertical" className="verification-request" onFinish={this.handleFinish}>
-        <h1 className="verification-request-title">Verification request</h1>
         <Form.Item label="Task" name="task" rules={[{required: true, message: 'Please choose task'}]}>
           <Select
             showSearch
@@ -46,7 +79,7 @@ class VerificationRequest extends Component<{}, State> {
             onChange={this.handleSelectChange}
           >
             {this.state.options.map(option => (
-              <Option key={`${option}${(+new Date()).toString(16)}`} value={option}>{option}</Option>))}
+              <Option key={`${option.id}${(+new Date()).toString(16)}`} value={option.id}>{option.id}</Option>))}
           </Select>
         </Form.Item>
         {this.state.isChosen &&
@@ -71,8 +104,8 @@ class VerificationRequest extends Component<{}, State> {
         </>
         }
       </Form>
-    );
+    )
   }
 }
 
-export default VerificationRequest;
+export default VerificationRequest
