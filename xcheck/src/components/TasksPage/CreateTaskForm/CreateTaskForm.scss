@@ -1,1 +1,27 @@
-@import '../../../styles/values.scss'
+@import '../../../styles/values.scss';
+
+
+.create-task-header {
+    font-size:25px;
+}
+
+.ant-form-item-control-input-content{
+    display:flex;
+    justify-content: space-between;
+}
+
+.ant-form-item-control{
+    max-width: 100% !important;
+}
+
+.add-button,
+.finish-button{
+    color:white;
+    background-color: $background-color;
+    border-color: $background-color;
+    &:hover{
+        color:white;
+        background-color:$font-color;
+        border-color:$font-color;
+    }
+}
