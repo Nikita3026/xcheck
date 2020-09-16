@@ -11,6 +11,7 @@ import {
   Input,
   Button,
   Select,
+  Spin
 } from 'antd';
 import {
   LockFilled,
@@ -21,22 +22,24 @@ import {
 interface IAuth{
     history:object
 }
-interface CurrentState {
-    login: string|null,
-    role: string|null,
-    password: string|null,
-    passwordRepeat: string|null,
-    isAuthorizationEnd:boolean
+interface State {
+  login: string|null,
+  role: Array<string>|null,
+  password: string|null,
+  passwordRepeat: string|null,
+  error: string|null,
+  isAuthorizationEnd: boolean,
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
-    state= {
+    state = {
       login: '',
       role: [],
       password: '',
       passwordRepeat: '',
       error: '',
-      isAuthorizationEnd:false
+      isAuthorizationEnd:false,
+      isLoad: false
     };
     formItemLayout = {
         labelCol: {
@@ -57,8 +60,10 @@ class AuthorizationForm extends Component<IAuth, {}>{
         },
     };
     onFinish = async () : Promise<any>=> {
+      this.setState({isLoad: true})
       const regRequest = new Requests();
       const data = await regRequest.getDataByParameter('users', 'githubId', this.state.login)
+      this.setState({isLoad: false})
       if(data.length === 0)
         this.setState({error: "Account doesn't exists"});
       else {
@@ -86,6 +91,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
           >
             <h1 className='authentification-title'>Authorization</h1>
             <p className='error-block'>{this.state.error}</p>
+            <p className='error-block'>{(this.state.isLoad) && <Spin />}</p>
             <div className='input-items'>
                 <Form.Item
                     name="login"
@@ -137,7 +143,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                           if (pass) {
                             return Promise.resolve();
                           }
-                          return Promise.reject("Password isn't valid");
+                          return Promise.reject("Password must at least one uppercase letter, lowercase letter and number");
                         },
                       }),
                     ]}

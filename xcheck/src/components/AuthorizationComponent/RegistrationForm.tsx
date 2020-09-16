@@ -8,6 +8,7 @@ import {
     Input,
     Button,
     Select,
+    Spin 
   } from 'antd';
 import {
     LockFilled,
@@ -34,8 +35,11 @@ class RegistrationForm extends Component<IRegister, {}> {
       password: '',
       passwordRepeat: '',
       error: '',
-      isRegistrationEnd:false
+      isRegistrationEnd: false,
+      isLoad: false
     }
+    request = new Requests();
+
     formItemLayout = {
         labelCol: {
           xs: {
@@ -55,6 +59,7 @@ class RegistrationForm extends Component<IRegister, {}> {
         },
     };
     onFinish = async () : Promise<any> => {
+      this.setState({isLoad: true})
       const isloginunic = await this.isAccountUnic();
       if (isloginunic === 0) this.registrationRequest();
       else {
@@ -66,20 +71,19 @@ class RegistrationForm extends Component<IRegister, {}> {
       }
     };
     registrationRequest = async () : Promise<any>=> {
-      const regRequest = new Requests();
-      await regRequest.addData('users', {
+      await this.request.addData('users', {
         'githubId': this.state.login,
         'roles': [this.state.role],
         'password': this.state.password
       })
       this.setState(
         {
-          isRegistrationEnd:true
+          isRegistrationEnd:true,
+          isLoad: false
         });
     }
     isAccountUnic = async () : Promise<any>=> {
-      const qwerty = new Requests();
-      const data = await qwerty.getDataByParameter('users', 'githubId', this.state.login);
+      const data = await this.request.getDataByParameter('users', 'githubId', this.state.login);
       return data.length;
     }
     inputHandler = (event : React.ChangeEvent<HTMLInputElement>) : void => {
@@ -100,6 +104,7 @@ class RegistrationForm extends Component<IRegister, {}> {
           >
             <h1 className='authentification-title'>Registration</h1>
             <p className='error-block'>{this.state.error}</p>
+            <p className='error-block'>{(this.state.isLoad) && <Spin />}</p>
             <div className='input-items'>
                 <Form.Item
                     name="login"
@@ -152,7 +157,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                             if (pass) {
                               return Promise.resolve();
                             }
-                            return Promise.reject("Password isn't valid");
+                            return Promise.reject("Password must at least one uppercase letter, lowercase letter and number");
                           },
                         }),
                     ]}
@@ -174,15 +179,6 @@ class RegistrationForm extends Component<IRegister, {}> {
                       required: true,
                       message: 'Please confirm your password!',
                     },
-                    ({ getFieldValue }) => ({
-                      validator() {
-                        const pass = getFieldValue('password').match(passwordRegExp);
-                        if (pass) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject("Password isn't valid");
-                      },
-                    }),
                     ({ getFieldValue }) => ({
                       validator(rule, value) {
                         if (!value || getFieldValue('password') === value) {
