@@ -1,0 +1,26 @@
+@import '../../styles/values.scss';
+
+.ant-btn-primary{
+  color:white;
+  background-color: $background-color;
+  border-color: $background-color;
+  &:hover{
+    color:white;
+    background-color:$font-color;
+    border-color:$font-color;
+  }
+}
+
+.reviews-request{
+  margin: 0 auto;
+  padding: 25px;
+  max-width: 750px;
+  &-title{
+    text-align: center;
+  }
+  & .item-content{
+    flex: 1 1;
+    font-size: 1.1rem;
+  }
+
+}
