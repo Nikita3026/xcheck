@@ -1,0 +1,18 @@
+@import '../../styles/values.scss';
+.spin-wrapper{
+  text-align: center;
+}
+
+.verification-request{
+  .ant-btn {
+    color: white;
+    background-color: $background-color;
+    border-color: $background-color;
+
+    &:hover {
+      color: white;
+      background-color: $font-color;
+      border-color: $font-color;
+    }
+  }
+}
