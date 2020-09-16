@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom"
 import './Authorization.scss';
-import { githubAuth } from './AuthConstants'
 import { passwordRegExp } from './AuthConstants'
 import Requests from '../../utils/requests/requests'
+import ModalComponent from './Modal'
 import { SelectValue } from 'antd/lib/select';
 import {Link} from 'react-router-dom';
 import {
@@ -162,12 +162,13 @@ class AuthorizationForm extends Component<IAuth, {}>{
             </Form.Item>
             <p className='auth-choise'>Or</p>
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+              <ModalComponent text='Sign up with GitHub'/>
+                {/* <Button type="primary" htmlType="submit">
                   <a href={githubAuth.githubHref} className='github-href'>
                     <GithubFilled className='github-icon'/>
                     Sign up with GitHub
                   </a>
-                </Button>
+                </Button> */}
             </Form.Item>
             <Form.Item>
                 <p className='authorization-transition'>New to X-Check? <Link to='/registration'>Sign up</Link></p>
