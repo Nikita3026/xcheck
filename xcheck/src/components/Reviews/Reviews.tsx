@@ -7,10 +7,10 @@ class Reviews extends React.Component<{},{}> {
   counter = 3;
 
   state = {
-    searchText: '',
     data: [],
     isTasksExist: true,
-    numberOfTasksAtPage: 0
+    numberOfTasksAtPage: 0,
+    initLoading: true
   }; 
   componentDidMount = async() : Promise<any> => {
     this.getData((res: Array<{}>) => {
@@ -22,22 +22,11 @@ class Reviews extends React.Component<{},{}> {
         data: newArray,
       })
     });
-    /* const reviewRequest = new Requests();
-    const reviews = await reviewRequest.getData('reviews')
-    this.setState({
-      data: reviews
-    }) 
-    console.log(reviews) */
   };
   changeNumberOfTasksAtPage =(newNumber:number):void =>{
     this.setState({
       numberOfTasksAtPage:newNumber
     });
-  }
-  sortByAlphabet = (a:string, b:string) => {
-    if ( a < b ) return -1;
-    if ( b < a ) return 1;
-    return 0;
   }
   async getData(callback : Function) : Promise<any>{
     const reviewRequest = new Requests();
@@ -49,8 +38,10 @@ class Reviews extends React.Component<{},{}> {
     } else {
       callback(res.data);
     }
+    this.setState({initLoading:false})
   };
   onLoadMore = () => {
+    this.setState({initLoading:true})
     this.getData((res : Array<{}>) => {
       const tempData: Array<{}> = [];
       res.map((item:object) => {
@@ -68,15 +59,29 @@ class Reviews extends React.Component<{},{}> {
       );
     });
   }
+  sortByAlphabet = (a:string, b:string) => {
+    if ( a < b ) return -1;
+    if ( b < a ) return 1;
+    return 0;
+  }
+  sortDate = (a:string, b:string) => {
+    const arr_a = a.split('-').reverse();
+    const arr_b = b.split('-').reverse();
+    const date_a = new  Date(+arr_a[0], +arr_a[1], +arr_a[2]);
+    const date_b = new  Date(+arr_b[0], +arr_b[1], +arr_b[2]);
+    if ( date_a < date_b ) return -1;
+    if ( date_b < date_a ) return 1;
+    return 0;
+  }
   render() {
     return (
       <div className='reviews'>
-        <Table dataSource={this.state.data}>
+        <Table dataSource={this.state.data} 
+              loading={this.state.initLoading}>
             <Table.Column key="task" 
                 title="Task" 
                 dataIndex="task"     
                 sorter={(a:{task:string},b:{task:string}) => this.sortByAlphabet(a.task,b.task)}
-                /* filters={this.getColumnSearchProps} */
                 />
             <Table.Column key="score" 
                 title="Score" 
@@ -85,13 +90,13 @@ class Reviews extends React.Component<{},{}> {
             <Table.Column key="deadline" 
                 title="Deadline" 
                 dataIndex="deadline"
-                sorter={(a:any, b:any) => a.deadline - b.deadline}/>
+                sorter={(a:{deadline:string},b:{deadline:string}) => this.sortDate(a.deadline,b.deadline)}/>
             <Table.Column key="author" 
                 title="Author" 
                 dataIndex="author"
                 sorter={(a:{author:string},b:{author:string}) => this.sortByAlphabet(a.author,b.author)}/>
         </Table>
-        <Button className = "loading-more-button" onClick={() =>this.onLoadMore()}>Loading more</Button>
+        <Button className="loading-more-button" onClick={() =>this.onLoadMore()}>Loading more</Button>
       </div>
     );
   }
