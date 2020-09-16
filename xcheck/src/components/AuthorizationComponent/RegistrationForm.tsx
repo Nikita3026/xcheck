@@ -8,6 +8,7 @@ import {
     Input,
     Button,
     Select,
+    Spin
   } from 'antd';
 import {
     LockFilled,
@@ -34,7 +35,8 @@ class RegistrationForm extends Component<IRegister, {}> {
       password: '',
       passwordRepeat: '',
       error: '',
-      isRegistrationEnd:false
+      isRegistrationEnd:false,
+      isLoad: false
     }
     formItemLayout = {
         labelCol: {
@@ -55,6 +57,7 @@ class RegistrationForm extends Component<IRegister, {}> {
         },
     };
     onFinish = async () : Promise<any> => {
+      this.setState({isLoad: true})
       const isloginunic = await this.isAccountUnic();
       if (isloginunic === 0) this.registrationRequest();
       else {
@@ -64,6 +67,7 @@ class RegistrationForm extends Component<IRegister, {}> {
             isRegistrationEnd:true
           });
       }
+      this.setState({isLoad: false})
     };
     registrationRequest = async () : Promise<any>=> {
       const regRequest = new Requests();
@@ -100,6 +104,7 @@ class RegistrationForm extends Component<IRegister, {}> {
           >
             <h1 className='authentification-title'>Registration</h1>
             <p className='error-block'>{this.state.error}</p>
+            <p className='error-block'>{(this.state.isLoad) && <Spin />}</p>
             <div className='input-items'>
                 <Form.Item
                     name="login"
@@ -152,7 +157,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                             if (pass) {
                               return Promise.resolve();
                             }
-                            return Promise.reject("Password isn't valid");
+                            return Promise.reject("Password must contains at least one uppercase letter, lowercase letter and number");
                           },
                         }),
                     ]}
@@ -174,15 +179,6 @@ class RegistrationForm extends Component<IRegister, {}> {
                       required: true,
                       message: 'Please confirm your password!',
                     },
-                    ({ getFieldValue }) => ({
-                      validator() {
-                        const pass = getFieldValue('password').match(passwordRegExp);
-                        if (pass) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject("Password isn't valid");
-                      },
-                    }),
                     ({ getFieldValue }) => ({
                       validator(rule, value) {
                         if (!value || getFieldValue('password') === value) {
