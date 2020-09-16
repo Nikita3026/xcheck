@@ -3,10 +3,16 @@ import './Reviews.scss'
 import Requests from '../../utils/requests/requests'
 import { Table, Input, Button, Space } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-class Reviews extends React.Component<{},{}> {
+interface State{
+  data: Array<object>,
+  isTasksExist: boolean,
+  numberOfTasksAtPage: number,
+  initLoading: boolean
+}
+class Reviews extends React.Component<{},State> {
   counter = 3;
-
-  state = {
+  requests = new Requests()
+  state : State= {
     data: [],
     isTasksExist: true,
     numberOfTasksAtPage: 0,
@@ -29,8 +35,7 @@ class Reviews extends React.Component<{},{}> {
     });
   }
   async getData(callback : Function) : Promise<any>{
-    const reviewRequest = new Requests();
-    const res = await reviewRequest.getRequest('reviews');
+    const res = await this.requests.getRequest('reviews');
     if(res.data.length === 0) {
       this.setState({
         isTasksExist:false
@@ -49,9 +54,7 @@ class Reviews extends React.Component<{},{}> {
       })
       this.setState(
         {
-          data:tempData,
-          list: tempData,
-          loading: false,
+          data:tempData
         },
         () => {
           window.dispatchEvent(new Event('resize'));
