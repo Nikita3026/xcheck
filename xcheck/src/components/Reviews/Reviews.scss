@@ -5,9 +5,16 @@
         display: none;
     }
     .ant-table-thead > tr > th{
-        background-color: $font-color;
+        background-color: $background-color;
+        color: #ffffff;
+        font-size: 18px;
+        transition: 0.5s;
     }
     .ant-table-thead th.ant-table-column-has-sorters:hover{
-         background-color: $background-color;
+        background-color: $font-color;
+    }
+    .ant-table-column-sorter-up.active, 
+    .ant-table-column-sorter-down.active{
+        color: #000000;
     }
 }
