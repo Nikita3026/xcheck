@@ -7,11 +7,8 @@ import {
     Button,
     Modal,
     Radio,
-    Select,
-    Cascader,
     DatePicker,
     InputNumber,
-    TreeSelect,
     Switch
   } from 'antd';
 
@@ -29,12 +26,6 @@ interface Props {
 }
 
 interface State {
-    componentSize:string,
-    taskName:string|null,
-    itemDescription:string,
-    title:string,
-    maxScore:number,
-    minScore:number,
     isTaskVerifiedOnlyByMentor:boolean,
     deadlineDate: string|null,
     isItFirstItemOfTask:boolean,
@@ -46,39 +37,26 @@ export class CreateTaskForm extends Component<Props, State> {
     formRef = React.createRef<FormInstance>();
 
     state = {
-        componentSize:'default',
-        taskName:'',
-        itemDescription:'',
-        title:'',
-        maxScore:0,
-        minScore:0,
         isTaskVerifiedOnlyByMentor:false,
         deadlineDate:null,
         isItFirstItemOfTask:true,
         taskItemScope:'Basic'
     }
 
-
+    setSavedValues = () => {
+      this.formRef.current!.setFieldsValue({
+        taskName: localStorage.getItem('createFormTaskName'),
+        deadlineDate: this.setDataValue()
+      });
+    }
 
     componentDidMount(){
-    /*   this.formRef.current!.setFieldsValue({
-        taskName: localStorage.getItem('createFormTaskName'),
-        deadlineDate: localStorage.getItem('createFormDeadlineDate')
-      }); */
-      /* this.setState({
-        taskName:,
-        deadlineDate: localStorage.getItem('createFormDeadlineDate')
-      }) */
+      this.setSavedValues();
     }
 
     clearItemFields = () => {
-      this.setState({
-        itemDescription:'',
-        title:'',
-        maxScore:0,
-        minScore:0,
-        isTaskVerifiedOnlyByMentor:false
-      })
+      this.formRef.current!.resetFields();
+      this.setSavedValues();
     }
 
     openSuccessNotification = (nameOfEssense:string) : void => {
@@ -89,14 +67,10 @@ export class CreateTaskForm extends Component<Props, State> {
         content: nameOfEssense === 'item'?`You can continue adding items or finish creating the task.`:'You can view it in the list of tasks',
         onOk(){
           if(nameOfEssense === 'task'){
-            return new Promise((resolve:Function, reject) => {
                 localStorage.createFormTaskName = '';
                 localStorage.createFormDeadlineDate = '';
-                setState({
-                  isItFirstItemOfTask:true
-                })
-                setTimeout(resolve(handleExitButtonClick()), 1000);
-            }).catch(() => console.log('Oops errors!'));
+                setState({isItFirstItemOfTask:true})
+                setTimeout(handleExitButtonClick(), 1000);
           }
         }
       });
@@ -113,36 +87,6 @@ export class CreateTaskForm extends Component<Props, State> {
         },
         onCancel() {},
       });
-    }
-
-    handleTaskNameChange = (event: React.ChangeEvent<HTMLInputElement>):void =>{
-      this.setState({
-        taskName:event.target.value
-      })
-      localStorage.createFormTaskName = event.target.value;
-    }
-
-    handleItemDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>):void =>{
-      this.setState({
-        itemDescription:event.target.value
-      })
-    }
-
-    handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>):void =>{
-      this.setState({
-        title:event.target.value
-      })
-    }
-
-    handleScoreChange = (type:string, value: number):void =>{
-      const newValue = value === undefined?0:value;
-      type === 'maxScore'?
-      this.setState({
-        maxScore:newValue
-      })
-      :this.setState({
-        minScore:newValue
-      })
     }
 
     handleScopeChange = (e:RadioChangeEvent) => {
@@ -162,36 +106,75 @@ export class CreateTaskForm extends Component<Props, State> {
       })
     }
 
+    handleMentorVerificationSwitch = (checked:boolean) => {
+      this.setState({
+        isTaskVerifiedOnlyByMentor:checked
+      })
+    }
+
     checkIsThisDeadlineDateImpossible=(newDeadlineDateString:string):boolean=>{
       const deadlineDate:any = new Date(newDeadlineDateString);
       const dateNow:any = new Date();
       return ((deadlineDate - dateNow) > 0);
     }
 
-    changeDeadlineDate = (newDeadlineDateString:string) =>{
-      if(newDeadlineDateString === '') {
-        this.setState({
-          deadlineDate:''
-        })
-        localStorage.createFormDeadlineDate = '';
-      } else {
-        const dateNow:any = new Date();
-        const isDateCorrect:boolean = this.checkIsThisDeadlineDateImpossible(newDeadlineDateString);
-        const newDeadlineDate = isDateCorrect ? newDeadlineDateString : dateNow.toLocaleString();
-        this.setState({
-          deadlineDate:newDeadlineDate
-        })
-        localStorage.createFormDeadlineDate = newDeadlineDate;
-      }
-    }
-
     setDataValue = ():moment.Moment| null => {
-      if(localStorage.createFormDeadlineDate === '') {
-        return null;
-      } else {
         const dateNow:any = new Date();
         const isDateCorrect:boolean = this.checkIsThisDeadlineDateImpossible(localStorage.createFormDeadlineDate);
-        return isDateCorrect?moment(localStorage.getItem('createFormDeadlineDate'), 'YYYY-MM-DD'):moment(dateNow.toLocaleString(),'DD-MM-YYYY')
+        return  isDateCorrect?moment(localStorage.getItem('createFormDeadlineDate'), 'YYYY-MM-DD') : moment(dateNow.toLocaleString(),'DD-MM-YYYY');
+    }
+
+    createTaskRequest = async () :Promise<any> => {
+      const fieldValues = this.formRef.current!.getFieldsValue();
+      const taskItem:object = {
+        id: fieldValues.taskName,
+        author: "test",
+        state: "DRAFT",
+        categoriesOrder: [
+          "Basic Scope",
+          "Advanced Scope",
+          "Extra Scope"
+        ],
+        deadline:moment(fieldValues.deadlineDate).format('YYYY-MM-DD'),
+        items: [
+          {
+            minScore: fieldValues.minScore,
+            maxScore: fieldValues.maxScore,
+            category: `${this.state.taskItemScope} Scope`,
+            title: fieldValues.title,
+            description: fieldValues.itemDescription,
+            verifiedOnlyByMentor: this.state.isTaskVerifiedOnlyByMentor
+          }
+        ]
+      }
+      await this.request.addData('tasks', taskItem);
+    }
+
+    addTaskItemRequest = async() =>{
+      const fieldValues = this.formRef.current!.getFieldsValue();
+      const taskName: any = localStorage.getItem('createFormTaskName');
+      const existingData = await this.request.getDataByParameter('tasks','id',taskName);
+      existingData[0].items.push({
+        minScore: fieldValues.minScore,
+        maxScore: fieldValues.maxScore,
+        category: `${this.state.taskItemScope} Scope`,
+        title: fieldValues.title,
+        description: fieldValues.itemDescription,
+        verifiedOnlyByMentor:this.state.isTaskVerifiedOnlyByMentor
+      });
+      await this.request.changeData('tasks', taskName, existingData[0]);
+    }
+
+    onFormFieldsValuesChange = (target:any) => {
+      for(let key of target) {
+        switch(key.name[0]) {
+          case 'taskName': localStorage.createFormTaskName = key.value;
+          break;
+          case 'deadlineDate':
+          localStorage.createFormDeadlineDate = target[0].value === null?'':moment(target[0].value).format('YYYY-MM-DD');
+          break;
+          default:break;
+        }
       }
     }
 
@@ -204,43 +187,12 @@ export class CreateTaskForm extends Component<Props, State> {
       return isTaskUnique;
     }
 
-    createTaskRequest = async () :Promise<any> => {
-      const taskItem:object = {
-        id: localStorage.getItem('createFormTaskName'),
-        author: "test",
-        state: "DRAFT",
-        categoriesOrder: [
-          "Basic Scope",
-          "Advanced Scope",
-          "Extra Scope"
-        ],
-        deadline:this.state.deadlineDate,
-        items: [
-          {
-            minScore: this.state.minScore,
-            maxScore: this.state.maxScore,
-            category: `${this.state.taskItemScope} Scope`,
-            title: this.state.title,
-            description: this.state.itemDescription,
-            verifiedOnlyByMentor:this.state.isTaskVerifiedOnlyByMentor
-          }
-        ]
+     taskNameValidator = async(): Promise<any> => {
+      if(!this.state.isItFirstItemOfTask) return true;
+      if (await  this.checkIsTaskNameUnique()) {
+        return Promise.resolve();
       }
-        await this.request.addData('tasks', taskItem);
-    }
-
-    addTaskItemRequest = async() =>{
-      const taskName: any = localStorage.getItem('createFormTaskName');
-      const existingData = await this.request.getDataByParameter('tasks','id',taskName);
-      existingData[0].items.push({
-        minScore: this.state.minScore,
-        maxScore: this.state.maxScore,
-        category: `${this.state.taskItemScope} Scope`,
-        title: this.state.title,
-        description: this.state.itemDescription,
-        verifiedOnlyByMentor:this.state.isTaskVerifiedOnlyByMentor
-      });
-      await this.request.changeData('tasks', taskName, existingData[0]);
+      return Promise.reject("A task with the same name already exist!");
     }
 
     onFinish = async (): Promise<any> => {
@@ -249,58 +201,52 @@ export class CreateTaskForm extends Component<Props, State> {
         this.setState({
           isItFirstItemOfTask:false
         })
-        this.clearItemFields();
       } else {
         await this.addTaskItemRequest();
       }
+      this.clearItemFields();
       this.openSuccessNotification('item');
     }
 
+    disabledDate = (current:moment.Moment) => {
+      return current && current < moment().endOf('day');
+    }
 
     render() {
-      const checkIsTaskNumberUnique:Function = this.checkIsTaskNameUnique;
         return (
-            <div className = "create-task-form-container">
-      <Form
-        ref={this.formRef}
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 14,
-        }}
-        layout="horizontal"
-        initialValues={{
-          size: this.state.componentSize,
-        }}
-        className = 'create-task-main'
-        onFinish={this.onFinish}
-      >
-          <Form.Item
-              className = "create-task-name"
-              rules={[
-                { required: true, message: 'Please input task name!' },
-                () => ({
-                  async validator() : Promise<any> {
-                    if (await checkIsTaskNumberUnique()) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject("A task with the same name already exist!");
-                  },
-                }),
-              ]}
-              name = "taskName"
-              >
-                <Input
-                className = "create-task-name-input"
-                placeholder = 'Create Your Task Name'
-                value = {this.state.taskName}
-                onChange = {(e:React.ChangeEvent<HTMLInputElement>) => this.handleTaskNameChange(e)}
-                name = "taskName"
-                />
-          </Form.Item>
+        <div className = "create-task-form-container">
+        <Form
+          ref={this.formRef}
+          labelCol={{
+            span: 4,
+          }}
+          wrapperCol={{
+            span: 14,
+          }}
+          layout="horizontal"
+          className = 'create-task-main'
+          onFinish={this.onFinish}
+          onFieldsChange = {this.onFormFieldsValuesChange}
+          initialValues = {{
+            size:'default'
+          }}
+        >
+        <Form.Item
+        className = "create-task-name"
+        rules={[
+          { required: true, message: 'Please input task name!' },
+          {validator:this.taskNameValidator}
+        ]}
+        name = "taskName"
+        >
+          <Input
+          className = "create-task-name-input"
+          placeholder = 'Create Your Task Name'
+          name = "taskName"
+          />
+        </Form.Item>
 
-                <hr/>
+        <hr/>
         <Form.Item label="Categories" name="size">
           <Radio.Group onChange = {(e:RadioChangeEvent) => this.handleScopeChange(e)}>
             <Radio.Button value="default">Basic Scope</Radio.Button>
@@ -308,72 +254,65 @@ export class CreateTaskForm extends Component<Props, State> {
             <Radio.Button value="large">Extra Scope</Radio.Button>
           </Radio.Group>
         </Form.Item>
+
          <Form.Item
          label="Title"
          rules={[{ required: true, message: 'Please input item title' }]}
          name = "title"
          shouldUpdate
          >
-          <Input
-          value = {this.state.title}
-          onChange = {(e:React.ChangeEvent<HTMLInputElement>) => this.handleTitleChange(e)}
-          name = "title"
-          />
+          <Input name = "title"/>
         </Form.Item>
+
         <Form.Item
         label="Item Description"
         rules={[{ required: true, message: 'Please input item description!' }]}
-        name = "item-description"
+        name = "itemDescription"
         >
-          <Input
-          value = {this.state.itemDescription}
-          onChange = {(e:React.ChangeEvent<HTMLInputElement>) => this.handleItemDescriptionChange(e)}
-          name = "item-description"
-          />
+          <Input name = "itemDescription"/>
         </Form.Item>
+
         <Form.Item
         label="Min Score"
         rules={[{ required: true, message: 'Please input minimum score value!' }]}
-        name = "min-score"
+        name = "minScore"
         >
-          <InputNumber
-          max={0}
-          value = {this.state.minScore}
-          onChange = {(value:any) => this.handleScoreChange('minScore',value)}
-          name = "min-score"
-          />
+          <InputNumber max={0} name = "minScore"/>
         </Form.Item>
+
         <Form.Item
         label="Max Score"
         rules={[{ required: true, message: 'Please input maximum score value!' }]}
-        name = "max-score"
+        name = "maxScore"
         >
-          <InputNumber
-          min={0}
-          value = {this.state.maxScore}
-          onChange = {(value:any) => this.handleScoreChange('maxScore',value)}
-          name = "max-score"
-          />
+          <InputNumber min={0} name = "maxScore"/>
         </Form.Item>
-        <Form.Item label="Verified Only By a Mentor">
-          <Switch />
+        <Form.Item
+        label="Verified Only By a Mentor"
+        name = "VerifiedOnlyByMentor"
+        >
+          <Switch onChange = {(checked:boolean) => this.handleMentorVerificationSwitch(checked)}/>
         </Form.Item>
+
         <Form.Item className = "buttons-row">
-           <Form.Item>
-          <Button
-          className = "add-button"
-          type="primary"
-          htmlType="submit"
-          ><PlusOutlined />Add</Button>
+          <Form.Item>
+            <Button
+            className = "add-button"
+            type="primary"
+            htmlType="submit"
+            ><PlusOutlined />Add</Button>
           </Form.Item>
+
           <Form.Item  rules={[{ required: true, message: 'Please input deadline date!' }]} name = "deadlineDate">
             <DatePicker
             placeholder = 'Deadline Date'
-            onChange = {(_, dateString:string) => this.changeDeadlineDate(dateString)}
-            value = {this.setDataValue()}
+            disabledDate={this.disabledDate}
+           /*  onChange = {(_, dateString:string) => this.changeDeadlineDate(dateString)}
+            value = {this.setDataValue()} */
             name = "deadlineDate"
             />
           </Form.Item>
+
           <Button className = "finish-button" onClick = {():void =>this.openConfirmNotification()}><FileDoneOutlined />Finish Creating</Button>
         </Form.Item>
       </Form>
