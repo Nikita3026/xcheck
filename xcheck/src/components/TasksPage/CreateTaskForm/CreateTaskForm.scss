@@ -6,18 +6,15 @@
 }
 .create-task-form-container{
     .create-task-name{
-        margin-bottom:1.5rem;
+        max-width:40%;
+        margin:0 auto;
         .create-task-name-input{
             height:2.5rem;
             font-size:18px;
             border-color:$background-color;
-            margin:0 auto;
-            max-width:40%;
         }
     }
-    .create-task-main{
-        margin-top:1.5rem;
-    }
+
     .ant-form-item-control-input-content{
         display:flex;
         justify-content: space-between;
