@@ -40,7 +40,7 @@ class TasksList extends React.Component<{}, State> {
     list:  [],
     numberOfTasksAtPage:0,
     isTasksExist:true,
-    isCreateTaskFormNeed:true
+    isCreateTaskFormNeed:false
   };
 
   changeNumberOfTasksAtPage =(newNumber:number):void =>{
@@ -121,7 +121,7 @@ class TasksList extends React.Component<{}, State> {
           <Button className = "loading-more-button" onClick={() =>this.onLoadMore()}>Loading more</Button>
         </div>
       ) : null;
-    
+
 
     if(!this.state.isTasksExist) return (
       <div className = "empty-tasks-list-message">
