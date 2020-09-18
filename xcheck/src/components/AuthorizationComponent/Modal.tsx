@@ -1,17 +1,18 @@
 import React, {Component} from 'react'
-import { githubAuth } from './AuthConstants'
-import { Modal, Button, Select } from 'antd';
+import { githubAuthConst } from './AuthConstants'
+import { Modal, Button, Select, Form } from 'antd';
 import { GithubFilled } from '@ant-design/icons';
 import { SelectValue } from 'antd/lib/select';
+import { TeamOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
-class ModalComponent extends Component<{text:string}, {}> {
-    state = { 
-      visible: false,
-      isRoleSelected: false,
-      error: '',
-      role: ''
-    };
+class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, {}> {
+  state = { 
+    visible: false,
+    isRoleSelected: false,
+    error: '',
+    role: ''
+  };
 
   showModal = () => {
     this.setState({
@@ -25,8 +26,9 @@ class ModalComponent extends Component<{text:string}, {}> {
         this.setState({
             visible: false,
         });
-        window.location.href=githubAuth.githubHref;
-    } else this.setState({error: 'Select the role'})
+        window.location.href=githubAuthConst.githubHref;
+    } else this.setState({error: 'Select the role'});
+    this.props.isGithubOAuth();
   };
 
   handleCancel = (e : React.MouseEvent<HTMLElement>) => {
@@ -47,24 +49,38 @@ class ModalComponent extends Component<{text:string}, {}> {
     return (
       <>
         <Button type="primary" onClick={this.showModal}>
-            <GithubFilled/>
-          {this.props.text}
+            <GithubFilled/><a href={githubAuthConst.githubHref}>
+          {this.props.text}</a>
         </Button>
-        <Modal
+       {/*  <Modal
           title="Please select your role"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
+          <Form
+            name="signin"
+            id='form'
+          >
             <p className='error-block'>{this.state.error}</p>
-            <Select placeholder="Please select your role"
-                className='select'
-                onChange={ e => this.selectHandler(e) }>
-                <Option value="author" >Author</Option>
-                <Option value="student">Student</Option>
-                <Option value="supervizor">Supervizor</Option>
-            </Select>
-        </Modal>
+            <Form.Item
+                  name="select"
+                  label={<TeamOutlined />}
+                  rules={[{
+                    required: true,
+                    message: 'Please select your role!',
+                  },]}
+                >
+              <Select placeholder="Please select your role"
+                  className='select'
+                  onChange={ e => this.selectHandler(e) }>
+                  <Option value="author" >Author</Option>
+                  <Option value="student">Student</Option>
+                  <Option value="supervizor">Supervizor</Option>
+              </Select>
+            </Form.Item>  
+          </Form>
+        </Modal> */}
       </>
     );
   }
