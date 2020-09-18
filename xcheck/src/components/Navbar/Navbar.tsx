@@ -21,8 +21,6 @@ import {
   Link
 } from "react-router-dom"
 
-import Requests from '../../utils/requests/requests'
-
 
 const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu

@@ -1,0 +1,27 @@
+@import '../../styles/values.scss';
+
+.reviews-page-container{
+    .ant-table-pagination.ant-pagination{
+        display: none;
+    }
+    .ant-table-thead > tr > th{
+        background-color: $background-color;
+        color: #ffffff;
+        font-size: 18px;
+        transition: 0.5s;
+    }
+    .ant-table-thead th.ant-table-column-has-sorters:hover{
+        background-color: $font-color;
+    }
+    .ant-table-column-sorter-up.active, 
+    .ant-table-column-sorter-down.active{
+        color: #000000;
+    }
+    .add-button:hover, 
+    .loading-more-button:hover{
+        
+    }
+    .loading-more-button{
+        margin-top: 1.5rem;
+    }
+}
