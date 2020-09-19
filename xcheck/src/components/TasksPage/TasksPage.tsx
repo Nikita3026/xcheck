@@ -8,51 +8,45 @@ interface Props {
 }
 
 export class TasksPage extends Component<Props,{}> {
+    state ={
+        accessToken: ''
+    }
     async componentDidMount() {
         const code :any = window.location.href.match(/\?code=(.*)/);
         console.log(code[1]);
-        axios({
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const url = `https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}&code=${code[1]}`;
+         if(code){
+          axios({
             method: 'post',
-            url: `https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_sercret}&code=${code[1]}`,
+            url: proxyurl + url,
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
             }
           }).then((response) => {
-            const accessToken = response.data.access_token
+            const accessToken = response.data.access_token;
             console.log(response.data)
-            
-            // redirect the user to the home page, along with the access token
-          })
-
-        /* const token = await axios.post(`https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&client_sercret=${githubAuthConst.client_sercret}&code=${code[1]}`,
-            code[1], {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }}
-        ).then((response) => {
-    
-            const accessToken = response.data.access_token
-            console.log(response.data, 'accessToken: ', accessToken)
-            
-        })
-        console.log(token) */
-        /* try {
-          const response = await axios.post(`https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&code=${code}&client_sercret=${githubAuthConst.client_sercret}&redirect_uri=http://localhost:3000/tasks`);
-          console.log(response);
-        } catch (error) {   
-          console.error(error);
-        } */
-        /* if (code) {
-          fetch(`https://gitstar.herokuapp.com/authenticate/${code}`)
-            .then(response => response.json())
-            .then(({ token }) => {
-              this.setState({
-                token
-              });
-            });
-        } */
+            this.setState({
+                accessToken: accessToken
+            })
+          }).then(() => {
+            console.log(this.state.accessToken);
+            axios({
+              method: 'get',
+              url: `https://api.github.com/user?access_token=${this.state.accessToken}&client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}`,
+              headers: {
+                  'accept': 'application/json',
+                  /* 'Content-Type': 'application/json', */
+                  'Connection': 'close',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
+              }
+            }).then((response) => {
+              const user = response
+              console.log(user)
+              })
+          }) 
+        }
       }
     render() {
         return (
