@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Navbar from '../Navbar/Navbar'
 import TasksList from './TasksList'
 import axios from "axios"
+import Requests from '../../utils/requests/requests'
 import {githubAuthConst} from '../AuthorizationComponent/AuthConstants'
 interface Props {
     history:object
@@ -11,42 +12,28 @@ export class TasksPage extends Component<Props,{}> {
     state ={
         accessToken: ''
     }
-    async componentDidMount() {
+    request = new Requests();
+     componentDidMount = async () : Promise<any> => {
         const code :any = window.location.href.match(/\?code=(.*)/);
-        console.log(code[1]);
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const url = `https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}&code=${code[1]}`;
-         if(code){
-          axios({
-            method: 'post',
-            url: proxyurl + url,
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-          }).then((response) => {
-            const accessToken = response.data.access_token;
-            console.log(response.data)
-            this.setState({
-                accessToken: accessToken
+        if(code){
+          const accessToken = await this.request.addOAuthToken(code[1]);
+          console.log(accessToken)
+          const user = await this.request.getOAuthToken(accessToken)
+          if(await this.isAccountUnic(user.login) === 0) {
+            await this.request.addData('users', {
+              'githubId': user.login,
+              'roles': [localStorage.role],
+              'password': ''
             })
-          }).then(() => {
-            console.log(this.state.accessToken);
-            axios({
-              method: 'get',
-              url: `https://api.github.com/user?access_token=${this.state.accessToken}&client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}`,
-              headers: {
-                  'accept': 'application/json',
-                  /* 'Content-Type': 'application/json', */
-                  'Connection': 'close',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
-              }
-            }).then((response) => {
-              const user = response
-              console.log(user)
-              })
-          }) 
+          } else {
+            const loginData = await this.request.getDataByParameter('users', 'githubId', user.login)
+            
+          }
         }
+      }
+      isAccountUnic = async (login: string) : Promise<any>=> {
+        const data = await this.request.getDataByParameter('users', 'githubId', login);
+        return data.length;
       }
     render() {
         return (
