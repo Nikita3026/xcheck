@@ -26,8 +26,8 @@ export class TasksPage extends Component<Props,{}> {
               'password': ''
             })
           } else {
-            const loginData = await this.request.getDataByParameter('users', 'githubId', user.login)
-            
+            await this.request.getDataByParameter('users', 'githubId', user.login)
+            localStorage.login = user.login;
           }
         }
       }
