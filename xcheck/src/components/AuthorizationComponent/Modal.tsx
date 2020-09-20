@@ -52,7 +52,7 @@ class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, 
             <GithubFilled/><a href={githubAuthConst.githubHref}>
           {this.props.text}</a>
         </Button>
-       {/*  <Modal
+        <Modal
           title="Please select your role"
           visible={this.state.visible}
           onOk={this.handleOk}
@@ -80,7 +80,7 @@ class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, 
               </Select>
             </Form.Item>  
           </Form>
-        </Modal> */}
+        </Modal>
       </>
     );
   }
