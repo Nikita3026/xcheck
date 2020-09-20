@@ -1,1 +1,96 @@
-@import '../../../styles/values.scss'
+@import '../../../styles/values.scss';
+
+
+.create-task-header {
+    font-size:25px;
+}
+.create-task-form-container{
+    .create-task-name{
+        max-width:40%;
+        margin:0 auto;
+        .create-task-name-input{
+            height:2.5rem;
+            font-size:18px;
+            border-color:$background-color;
+        }
+    }
+
+    .ant-form-item-control-input-content{
+        display:flex;
+        justify-content: space-between;
+    }
+    .ant-form-item-control{
+        max-width: 100% !important;
+    }
+    .ant-radio-button-wrapper{
+        &:hover{
+            color:$font-color;
+        }
+    }
+    .ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper{
+        border-left:1px solid $background-color;
+        border-right:1px solid $background-color;
+        &:first-child{
+            border-left-color:$font-color;
+        }
+        &:last-child{
+            border-right-color:$font-color;
+        }
+    }
+    .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+        border-color:$font-color;
+        background-color:$font-color;
+        color:white;
+    }
+    .ant-switch-checked{
+        background-color:$font-color;
+    }
+    .ant-picker{
+        &:hover{
+            border-color:$font-color;
+        }
+    }
+
+
+
+
+ }
+
+ .ant-modal-body{
+    .ant-btn-primary{
+        background-color:$background-color;
+        border-color:$background-color;
+        color:white;
+        &:hover{
+            background-color:$font-color;
+            border-color:$font-color;
+        }
+        &:active{
+            background-color:$font-color;
+        }
+    }
+    .ant-modal-confirm-body > .anticon{
+        font-size:30px;
+    }
+    .ant-modal-confirm-body .ant-modal-confirm-title{
+        font-size:17px;
+    }
+    .ant-modal-confirm-body > .anticon + .ant-modal-confirm-title + .ant-modal-confirm-content{
+        margin-left:46px;
+    }
+}
+
+
+
+
+.add-button,
+.finish-button{
+    color:white;
+    background-color: $background-color;
+    border-color: $background-color;
+    &:hover{
+        color:white;
+        background-color:$font-color;
+        border-color:$font-color;
+    }
+}

@@ -8,7 +8,7 @@ import {
     Input,
     Button,
     Select,
-    Spin 
+    Spin
   } from 'antd';
 import {
     LockFilled,
@@ -69,6 +69,7 @@ class RegistrationForm extends Component<IRegister, {}> {
             isRegistrationEnd:true
           });
       }
+      this.setState({isLoad: false})
     };
     registrationRequest = async () : Promise<any>=> {
       await this.request.addData('users', {
@@ -157,7 +158,7 @@ class RegistrationForm extends Component<IRegister, {}> {
                             if (pass) {
                               return Promise.resolve();
                             }
-                            return Promise.reject("Password must at least one uppercase letter, lowercase letter and number");
+                            return Promise.reject("Password must contains at least one uppercase letter, lowercase letter and number");
                           },
                         }),
                     ]}

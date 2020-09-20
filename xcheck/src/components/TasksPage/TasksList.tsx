@@ -9,6 +9,7 @@ import {
   PlusOutlined
 } from '@ant-design/icons'
 import './TasksList.scss'
+import CreateTaskForm from './CreateTaskForm/CreateTaskForm'
 
 
 interface State {
@@ -17,7 +18,8 @@ interface State {
   data: Array<{}>,
   list: Array<{}>,
   numberOfTasksAtPage:number,
-  isTasksExist:boolean
+  isTasksExist:boolean,
+  isCreateTaskFormNeed:boolean
 }
 
 interface taskObject {
@@ -37,7 +39,8 @@ class TasksList extends React.Component<{}, State> {
     data:  [],
     list:  [],
     numberOfTasksAtPage:0,
-    isTasksExist:true
+    isTasksExist:true,
+    isCreateTaskFormNeed:false
   };
 
   changeNumberOfTasksAtPage =(newNumber:number):void =>{
@@ -93,6 +96,12 @@ class TasksList extends React.Component<{}, State> {
     });
   };
 
+  handleCreateFormButtonsClick = () => {
+    this.setState({
+      isCreateTaskFormNeed:!this.state.isCreateTaskFormNeed
+    })
+  }
+
   render() {
     const { initLoading, loading, list } = this.state;
     const loadMore =
@@ -106,7 +115,7 @@ class TasksList extends React.Component<{}, State> {
             justifyContent:'space-between'
           }}
         >
-          <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+          <Button className = "add-button" type="primary" icon={<PlusOutlined />} onClick = {this.handleCreateFormButtonsClick}>
             Add
          </Button>
           <Button className = "loading-more-button" onClick={() =>this.onLoadMore()}>Loading more</Button>
@@ -120,6 +129,11 @@ class TasksList extends React.Component<{}, State> {
         {loadMore}
       </div>
     );
+
+    if(this.state.isCreateTaskFormNeed) {
+      return <CreateTaskForm handleExitButtonClick = {this.handleCreateFormButtonsClick}/>
+    }
+
     return (
       <List
         className="demo-loadmore-list"

@@ -6,6 +6,7 @@ import {
   } from "react-router-dom"
 import AuthorizationForm from '../AuthorizationComponent/AuthorizationForm'
 import RegistrationForm from '../AuthorizationComponent/RegistrationForm'
+import ReviewsPage from '../Reviews/ReviewsPage'
 import TasksPage from '../TasksPage/TasksPage'
 import VerificationRequestPage from "../VerificationRequest/VerificationRequestPage";
 
@@ -25,7 +26,9 @@ export class Router extends Component<Props, {}> {
                         </Route>
                         <Route path="/checking-another"></Route>
                         <Route path="/self-test"></Route>
-                        <Route path="/reviews"></Route>
+                        <Route path="/reviews">
+                            <ReviewsPage history={this.props.history}></ReviewsPage>
+                        </Route>
                         <Route path="/cross-check"></Route>
                         <Route path="/registration">
                             <RegistrationForm history = {this.props.history}/>
