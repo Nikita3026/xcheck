@@ -1,6 +1,9 @@
-export const githubAuth ={
-    githubHref: 'https://github.com/login/oauth/authorize?client_id=36984bd60624ab1ea219&redirect_uri=http://localhost:3000/',
-    client_id: '36984bd60624ab1ea219',
-    client_sercret: 'ce8704e34fa59e158b2b8884f5b69304a34aa27c'
+export const githubAuthConst ={
+    githubHref: 'https://github.com/login/oauth/authorize?client_id=cea86e6977b22536af83&scope=user',
+    client_id: 'cea86e6977b22536af83',
+    client_secret: 'a6bc01671d7cd88314bdea894965802bca7379e3',
+    proxyurl: "https://cors-anywhere.herokuapp.com/",
+
 }
+
 export const passwordRegExp = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/;

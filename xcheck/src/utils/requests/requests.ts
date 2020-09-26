@@ -1,4 +1,6 @@
 import API from "../API"
+import axios from "axios"
+import {githubAuthConst} from '../../components/AuthorizationComponent/AuthConstants'
 
 class Requests {
     async getRequest(essenceName:string): Promise<any> {
@@ -39,6 +41,31 @@ class Requests {
         }
     }
 
+    postOAuthToken(code:string) {
+        const url = `https://github.com/login/oauth/access_token?client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}&code=${code}`;
+        return axios({
+            method: 'post',
+            url: githubAuthConst.proxyurl+url,
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
+    getOAuthData(accessToken:string) {
+        const url = `https://api.github.com/user?access_token=${accessToken}&client_id=${githubAuthConst.client_id}&client_secret=${githubAuthConst.client_secret}`;
+        return axios({
+            method: 'get',
+            url: url,
+            headers: {
+                'accept': 'application/json',
+                'Connection': 'close',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
+            }
+        });
+    }
+
     async getDataByParameter(essenceName:string, parameterName:string, parameterValue:string|number) : Promise<any>{
         try{
             const res = await this.getRequest(`${essenceName}?${parameterName}=${parameterValue}`);
@@ -73,6 +100,26 @@ class Requests {
         try{
             const res = await this.deleteRequest(`${essenceName}/${id}`);
             return res;
+        } catch(error) {
+            console.log('Error when requesting the server');
+            return null;
+        }
+    }
+
+    async addOAuthToken(code:string) : Promise<any>{
+        try{
+            const res = await this.postOAuthToken(code);
+            return res.data.access_token;
+        } catch(error) {
+            console.log('Error when requesting the server');
+            return null;
+        }
+    }
+
+    async getOAuthToken(token:string ) : Promise<any>{
+        try{
+            const res = await this.getOAuthData(token);
+            return res.data;
         } catch(error) {
             console.log('Error when requesting the server');
             return null;
