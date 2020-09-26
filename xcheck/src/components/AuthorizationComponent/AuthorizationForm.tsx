@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom"
 import './Authorization.scss';
-import { githubAuth } from './AuthConstants'
 import { passwordRegExp } from './AuthConstants'
 import Requests from '../../utils/requests/requests'
+import ModalComponent from './Modal'
 import { SelectValue } from 'antd/lib/select';
 import {Link} from 'react-router-dom';
+
 import {
   Form,
   Input,
@@ -22,16 +23,17 @@ import {
 interface IAuth{
     history:object
 }
-interface CurrentState {
-    login: string|null,
-    role: string|null,
-    password: string|null,
-    passwordRepeat: string|null,
-    isAuthorizationEnd:boolean
+interface State {
+  login: string|null,
+  role: Array<string>|null,
+  password: string|null,
+  passwordRepeat: string|null,
+  error: string|null,
+  isAuthorizationEnd: boolean,
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
-    state= {
+    state = {
       login: '',
       role: [],
       password: '',
@@ -79,7 +81,9 @@ class AuthorizationForm extends Component<IAuth, {}>{
     selectHandler = (event : SelectValue) => {
       this.setState({role: event});
     }
+    githubOAuth = () => {
 
+    }
     render(){
       if(this.state.isAuthorizationEnd) return <Redirect to='/tasks'/>
         return(
@@ -164,12 +168,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
             </Form.Item>
             <p className='auth-choise'>Or</p>
             <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  <a href={githubAuth.githubHref} className='github-href'>
-                    <GithubFilled className='github-icon'/>
-                    Sign up with GitHub
-                  </a>
-                </Button>
+              <ModalComponent text='Sign up with GitHub' isGithubOAuth={() => this.githubOAuth()}/>
             </Form.Item>
             <Form.Item>
                 <p className='authorization-transition'>New to X-Check? <Link to='/registration'>Sign up</Link></p>
