@@ -3,7 +3,7 @@ import './Navbar.scss'
 import bigLogo from '../../assets/img/logo-big.png'
 import smallLogo from '../../assets/img/logo-small.png'
 
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu } from 'antd'
 import {
   PieChartOutlined,
   TeamOutlined,

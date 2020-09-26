@@ -1,11 +1,9 @@
 import React from 'react'
-import { List, Avatar, Button, Skeleton } from 'antd'
-import Requests from '../../utils/requests/requests'
+import { List, Button, Skeleton } from 'antd'
 import API from '../../utils/API'
 import {
   CarryOutOutlined,
   EditOutlined,
-  SearchOutlined,
   PlusOutlined
 } from '@ant-design/icons'
 import './TasksList.scss'
@@ -81,7 +79,7 @@ class TasksList extends React.Component<{}, State> {
     this.getData((res : Array<{}>) => {
       const tempData: Array<{}> = [];
       res.map((item:object) => {
-        tempData.push(item);
+        return tempData.push(item);
       })
       this.setState(
         {
@@ -143,7 +141,7 @@ class TasksList extends React.Component<{}, State> {
         dataSource={list}
         renderItem={(item:taskObject) =>(
           <List.Item
-            actions={[<a className = "additional-link change" key="list-loadmore-edit"><EditOutlined /></a>, <a className = "additional-link more" key="list-loadmore-more">More</a>]}
+            actions={[<a className = "additional-link change" key="list-loadmore-edit" href="/#"><EditOutlined /></a>, <a className = "additional-link more" key="list-loadmore-more" href='/#'>More</a>]}
           >
             <Skeleton avatar title={false} loading={this.state.loading} active>
               <List.Item.Meta
