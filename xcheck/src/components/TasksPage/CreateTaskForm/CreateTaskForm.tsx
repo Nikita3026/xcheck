@@ -181,21 +181,22 @@ export class CreateTaskForm extends Component<Props, State> {
     checkIsTaskNameUnique = async():Promise<any> => {
       const data = await this.request.getData('tasks');
       let isTaskUnique:boolean = true;
-      data.map((item:{id:string}) => {
-        if(item.id === localStorage.getItem('createFormTaskName')) isTaskUnique = false;
+      data.map(( item : { id : string }) => {
+        if (item.id === localStorage.getItem('createFormTaskName')) isTaskUnique = false;
+        return 0;
       })
       return isTaskUnique;
     }
 
-     taskNameValidator = async(): Promise<any> => {
-      if(!this.state.isItFirstItemOfTask) return true;
+     taskNameValidator = async() : Promise<any> => {
+      if (!this.state.isItFirstItemOfTask) return true;
       if (await  this.checkIsTaskNameUnique()) {
         return Promise.resolve();
       }
       return Promise.reject("A task with the same name already exist!");
     }
 
-    onFinish = async (): Promise<any> => {
+    onFinish = async () : Promise<any> => {
       if(this.state.isItFirstItemOfTask) {
         await this.createTaskRequest();
         this.setState({

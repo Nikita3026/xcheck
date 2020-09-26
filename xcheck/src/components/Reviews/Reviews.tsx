@@ -1,8 +1,7 @@
 import React from 'react';
 import './Reviews.scss'
 import Requests from '../../utils/requests/requests'
-import { Table, Input, Button, Space } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Button } from 'antd';
 interface State{
   data: Array<object>,
   isTasksExist: boolean,
@@ -50,7 +49,7 @@ class Reviews extends React.Component<{},State> {
     this.getData((res : Array<{}>) => {
       const tempData: Array<{}> = [];
       res.map((item:object) => {
-        tempData.push(item);
+        return tempData.push(item);
       })
       this.setState(
         {
