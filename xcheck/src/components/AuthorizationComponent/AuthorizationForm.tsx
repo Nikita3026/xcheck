@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom"
 import './Authorization.scss';
-import { githubAuth } from './AuthConstants'
 import { passwordRegExp } from './AuthConstants'
 import Requests from '../../utils/requests/requests'
+import ModalComponent from './Modal'
 import { SelectValue } from 'antd/lib/select';
 import {Link} from 'react-router-dom';
+
 import {
   Form,
   Input,
@@ -22,23 +23,25 @@ import {
 interface IAuth{
     history:object
 }
-interface CurrentState {
-    login: string|null,
-    role: string|null,
-    password: string|null,
-    passwordRepeat: string|null,
-    isAuthorizationEnd:boolean
+interface State {
+  login: string|null,
+  role: Array<string>|null,
+  password: string|null,
+  passwordRepeat: string|null,
+  error: string|null,
+  isAuthorizationEnd: boolean,
 }
 const { Option } = Select;
 class AuthorizationForm extends Component<IAuth, {}>{
-    state= {
+    state = {
       login: '',
       role: [],
       password: '',
       passwordRepeat: '',
       error: '',
       isAuthorizationEnd:false,
-      isLoad: false
+      isLoad: false,
+      isGithubOAuth: false
     };
     formItemLayout = {
         labelCol: {
@@ -60,7 +63,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
     };
     onFinish = async () : Promise<any> => {
       this.setState({isLoad: true})
-      const regRequest = new Requests();  
+      const regRequest = new Requests();
       const data = await regRequest.getDataByParameter('users', 'githubId', this.state.login);
       this.setState({isLoad: false})
       if(data.length === 0)
@@ -70,6 +73,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                 else {
                   localStorage.login = this.state.login;
                   localStorage.role = this.state.role;
+                  localStorage.pageKey = '1';
                   this.setState({isAuthorizationEnd: true});
                 }
     };
@@ -79,9 +83,18 @@ class AuthorizationForm extends Component<IAuth, {}>{
     selectHandler = (event : SelectValue) => {
       this.setState({role: event});
     }
+    githubOAuth = () => {
 
+    }
     render(){
-      if(this.state.isAuthorizationEnd) return <Redirect to='/tasks'/>
+      if(this.state.isAuthorizationEnd) {
+        switch(localStorage.getItem('role')){
+          case 'author': return <Redirect to='/tasks'/>;
+          case 'student':  return <Redirect to='/verification-request'/>;
+          case 'supervizor': return <Redirect to='/tasks'/>;
+        }
+      }
+
         return(
           <Form
             {...this.formItemLayout}
@@ -164,12 +177,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
             </Form.Item>
             <p className='auth-choise'>Or</p>
             <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  <a href={githubAuth.githubHref} className='github-href'>
-                    <GithubFilled className='github-icon'/>
-                    Sign up with GitHub
-                  </a>
-                </Button>
+              <ModalComponent text='Sign up with GitHub' isGithubOAuth={() => this.githubOAuth()}/>
             </Form.Item>
             <Form.Item>
                 <p className='authorization-transition'>New to X-Check? <Link to='/registration'>Sign up</Link></p>

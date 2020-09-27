@@ -7,9 +7,10 @@ interface Props {
 
 export class ReviewsPage extends Component<Props,{}> {
     render() {
+        localStorage.getItem('role') === 'student' ? localStorage.pageKey = '4':localStorage.pageKey = '6';
         return (
             <div className = "reviews-page-container">
-                <Navbar 
+                <Navbar
                 history = {this.props.history}
                 pageName = 'reviews'
                 >
@@ -18,6 +19,6 @@ export class ReviewsPage extends Component<Props,{}> {
             </div>
         )
     }
-}   
+}
 
 export default ReviewsPage

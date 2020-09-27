@@ -38,6 +38,8 @@ class RegistrationForm extends Component<IRegister, {}> {
       isRegistrationEnd:false,
       isLoad: false
     }
+    request = new Requests();
+
     formItemLayout = {
         labelCol: {
           xs: {
@@ -70,20 +72,19 @@ class RegistrationForm extends Component<IRegister, {}> {
       this.setState({isLoad: false})
     };
     registrationRequest = async () : Promise<any>=> {
-      const regRequest = new Requests();
-      await regRequest.addData('users', {
+      await this.request.addData('users', {
         'githubId': this.state.login,
         'roles': [this.state.role],
         'password': this.state.password
       })
       this.setState(
         {
-          isRegistrationEnd:true
+          isRegistrationEnd:true,
+          isLoad: false
         });
     }
     isAccountUnic = async () : Promise<any>=> {
-      const qwerty = new Requests();
-      const data = await qwerty.getDataByParameter('users', 'githubId', this.state.login);
+      const data = await this.request.getDataByParameter('users', 'githubId', this.state.login);
       return data.length;
     }
     inputHandler = (event : React.ChangeEvent<HTMLInputElement>) : void => {
