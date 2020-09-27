@@ -1,6 +1,6 @@
 # xcheck
 
-### [Link to deploy](xheck-team31-nikita3026.netlify.app)
+### [Link to deploy](https://xheck-team31-nikita3026.netlify.app/)
 
 ### `npm start`
 
