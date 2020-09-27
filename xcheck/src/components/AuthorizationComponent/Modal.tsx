@@ -49,8 +49,7 @@ class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, 
     return (
       <>
         <Button type="primary" onClick={this.showModal}>
-            <GithubFilled/><a href={githubAuthConst.githubHref}>
-          {this.props.text}</a>
+            <GithubFilled/> {this.props.text}
         </Button>
         <Modal
           title="Please select your role"

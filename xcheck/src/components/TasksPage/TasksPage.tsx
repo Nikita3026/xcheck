@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import Navbar from '../Navbar/Navbar'
 import TasksList from './TasksList'
-import axios from "axios"
 import Requests from '../../utils/requests/requests'
-import {githubAuthConst} from '../AuthorizationComponent/AuthConstants'
 interface Props {
     history:object
 }
@@ -15,6 +13,7 @@ export class TasksPage extends Component<Props,{}> {
     request = new Requests();
      componentDidMount = async () : Promise<any> => {
         const code :any = window.location.href.match(/\?code=(.*)/);
+        console.log(code)
         if(code){
           const accessToken = await this.request.addOAuthToken(code[1]);
           console.log(accessToken)
