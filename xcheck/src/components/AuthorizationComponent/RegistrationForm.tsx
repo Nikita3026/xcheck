@@ -35,7 +35,7 @@ class RegistrationForm extends Component<IRegister, {}> {
       password: '',
       passwordRepeat: '',
       error: '',
-      isRegistrationEnd:false,
+      isRegistrationEnd: false,
       isLoad: false
     }
     request = new Requests();
