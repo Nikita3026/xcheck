@@ -7,6 +7,7 @@ type Props = {
 }
 
 const VerificationRequestPage = (props: Props) => {
+  localStorage.getItem('role') === 'student' ? localStorage.pageKey = '1':localStorage.pageKey = '3';
   return (
     <Navbar
       history = {props.history}

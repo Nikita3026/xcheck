@@ -40,7 +40,8 @@ class AuthorizationForm extends Component<IAuth, {}>{
       passwordRepeat: '',
       error: '',
       isAuthorizationEnd:false,
-      isLoad: false
+      isLoad: false,
+      isGithubOAuth: false
     };
     formItemLayout = {
         labelCol: {
@@ -62,7 +63,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
     };
     onFinish = async () : Promise<any> => {
       this.setState({isLoad: true})
-      const regRequest = new Requests();  
+      const regRequest = new Requests();
       const data = await regRequest.getDataByParameter('users', 'githubId', this.state.login);
       this.setState({isLoad: false})
       if(data.length === 0)
@@ -72,6 +73,7 @@ class AuthorizationForm extends Component<IAuth, {}>{
                 else {
                   localStorage.login = this.state.login;
                   localStorage.role = this.state.role;
+                  localStorage.pageKey = '1';
                   this.setState({isAuthorizationEnd: true});
                 }
     };
@@ -85,7 +87,14 @@ class AuthorizationForm extends Component<IAuth, {}>{
 
     }
     render(){
-      if(this.state.isAuthorizationEnd) return <Redirect to='/tasks'/>
+      if(this.state.isAuthorizationEnd) {
+        switch(localStorage.getItem('role')){
+          case 'author': return <Redirect to='/tasks'/>;
+          case 'student':  return <Redirect to='/verification-request'/>;
+          case 'supervizor': return <Redirect to='/tasks'/>;
+        }
+      }
+
         return(
           <Form
             {...this.formItemLayout}

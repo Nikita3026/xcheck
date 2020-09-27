@@ -49,41 +49,90 @@ class Navbar extends Component<NavbarProps, State> {
     return bigLogo;
   }
 
+  renderItemsDependignOnTheRole = ():JSX.Element|null => {
+    const role:string|null = localStorage.getItem('role');
+    const pageKey:any = localStorage.getItem('pageKey');
+    switch(role) {
+      case 'author': return (
+        <Menu theme="dark" defaultSelectedKeys={[pageKey]} mode="inline">
+          <Menu.Item key="1" icon={<PieChartOutlined />}>
+            <Link to="/tasks">Tasks</Link>
+          </Menu.Item>
+          <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
+            <Link to="/reviews-requests">Reviews requests</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<LogoutOutlined />}>
+            <Link to="/">Exit</Link>
+          </Menu.Item>
+        </Menu>
+      );
+      case 'student': return (
+        <Menu theme="dark" defaultSelectedKeys={[pageKey]} mode="inline">
+          <Menu.Item key="1" icon={<PlusCircleOutlined />}>
+            <Link to="/verification-request">Verification request</Link>
+          </Menu.Item>
+          <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
+          <Menu.Item key="2" icon={<TeamOutlined />}>
+            <Link to="/checking-another">Work of people</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<UserOutlined />}>
+            <Link to="/self-test">Self-test</Link>
+            </Menu.Item>
+        </SubMenu>
+        <Menu.Item key="4" icon={<BarChartOutlined />}>
+            <Link to="/reviews">Reviews</Link>
+          </Menu.Item>
+        <Menu.Item key="5" icon={<SwapOutlined />}>
+            <Link to="/cross-check">Cross-check</Link>
+          </Menu.Item>
+          <Menu.Item key="6" icon={<LogoutOutlined />}>
+            <Link to="/">Exit</Link>
+          </Menu.Item>
+       </Menu>
+      );
+      case 'supervizor': return (
+        <Menu theme="dark" defaultSelectedKeys={[pageKey]} mode="inline">
+          <Menu.Item key="1" icon={<PieChartOutlined />}>
+          <Link to="/tasks">Tasks</Link>
+        </Menu.Item>
+        <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
+          <Link to="/reviews-requests">Reviews requests</Link>
+        </Menu.Item>
+        <Menu.Item key="3" icon={<PlusCircleOutlined />}>
+            <Link to="/verification-request">Verification request</Link>
+          </Menu.Item>
+          <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
+          <Menu.Item key="4" icon={<TeamOutlined />}>
+            <Link to="/checking-another">Work of people</Link>
+          </Menu.Item>
+          <Menu.Item key="5" icon={<UserOutlined />}>
+            <Link to="/self-test">Self-test</Link>
+            </Menu.Item>
+        </SubMenu>
+        <Menu.Item key="6" icon={<BarChartOutlined />}>
+            <Link to="/reviews">Reviews</Link>
+          </Menu.Item>
+        <Menu.Item key="7" icon={<SwapOutlined />}>
+            <Link to="/cross-check">Cross-check</Link>
+          </Menu.Item>
+          <Menu.Item key="8" icon={<LogoutOutlined />}>
+            <Link to="/">Exit</Link>
+          </Menu.Item>
+      </Menu>
+      );
+    }
+    return null;
+  }
+
   render() {
+    const navbarItems = this.renderItemsDependignOnTheRole();
     return (
       <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <div className = "logo">
               <img alt = "logo" className = "logo-img" src = {this.renderLogo()}></img>
             </div>
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                <Menu.Item key="1" icon={<PieChartOutlined />}>
-                  <Link to="/tasks">Tasks</Link>
-                </Menu.Item>
-                  <Menu.Item key="2" icon={<ExclamationCircleOutlined />}>
-                  <Link to="/reviews-requests">Reviews requests </Link>
-                  </Menu.Item>
-                <Menu.Item key="3" icon={<PlusCircleOutlined />}>
-                  <Link to="/verification-request">Verification request</Link>
-                </Menu.Item>
-                <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Works check">
-                  <Menu.Item key="4" icon={<TeamOutlined />}>
-                    <Link to="/checking-another">Work of people</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5" icon={<UserOutlined />}>
-                    <Link to="/self-test">Self-test</Link>
-                    </Menu.Item>
-                </SubMenu>
-                <Menu.Item key="6" icon={<BarChartOutlined />}>
-                    <Link to="/reviews">Reviews</Link>
-                </Menu.Item>
-                <Menu.Item key="7" icon={<SwapOutlined />}>
-                  <Link to="/cross-check">Cross-check</Link>
-                </Menu.Item>
-                <Menu.Item key="8" icon={<LogoutOutlined />}>
-                  <Link to="/">Exit</Link>
-                </Menu.Item>
-            </Menu>
+              {navbarItems}
           </Sider>
           <Layout className="site-layout">
     <Header className="site-layout-background" style={{

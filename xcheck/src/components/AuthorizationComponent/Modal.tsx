@@ -7,7 +7,7 @@ import { TeamOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, {}> {
-  state = { 
+  state = {
     visible: false,
     isRoleSelected: false,
     error: '',
@@ -78,7 +78,7 @@ class ModalComponent extends Component<{ text:string, isGithubOAuth: Function}, 
                   <Option value="student">Student</Option>
                   <Option value="supervizor">Supervizor</Option>
               </Select>
-            </Form.Item>  
+            </Form.Item>
           </Form>
         </Modal>
       </>

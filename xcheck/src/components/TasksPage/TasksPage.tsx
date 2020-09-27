@@ -36,9 +36,10 @@ export class TasksPage extends Component<Props,{}> {
         return data.length;
       }
     render() {
+        localStorage.pageKey = '1';
         return (
             <div className = "tasks-page-container">
-                <Navbar 
+                <Navbar
                 history = {this.props.history}
                 pageName = 'tasks'
                 >
