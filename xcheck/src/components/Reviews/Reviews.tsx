@@ -78,7 +78,8 @@ class Reviews extends React.Component<{},State> {
   render() {
     return (
       <div className='reviews'>
-        <Table dataSource={this.state.data} 
+        <Table dataSource={this.state.data}
+               
               loading={this.state.initLoading}>
             <Table.Column key="task" 
                 title="Task" 

@@ -9,7 +9,10 @@ import RegistrationForm from '../AuthorizationComponent/RegistrationForm'
 import ReviewsPage from '../Reviews/ReviewsPage'
 import TasksPage from '../TasksPage/TasksPage'
 import VerificationRequestPage from "../VerificationRequest/VerificationRequestPage";
-
+import CheckingAnotherPage from '../CheckingAnother/CheckingAnotherPage'
+import ReviewsRequestsPage from '../ReviewsRequests/ReviewsRequestsPage'
+import SelfTestPage from '../SelfTest/SelfTestPage'
+import CrossCheckPage from '../CrossCheck/CrossCheckPage'
 interface Props {
     history:object
 }
@@ -20,16 +23,24 @@ export class Router extends Component<Props, {}> {
             <div className = "router-container">
                 <BrowserRouter>
                     <Switch>
-                        <Route path="/reviews-requests"></Route>
+                        <Route path="/reviews-requests">
+                            <ReviewsRequestsPage history={this.props.history}/>
+                        </Route>
                         <Route path="/verification-request">
                             <VerificationRequestPage history={this.props.history} />
                         </Route>
-                        <Route path="/checking-another"></Route>
-                        <Route path="/self-test"></Route>
-                        <Route path="/reviews">
-                            <ReviewsPage history={this.props.history}></ReviewsPage>
+                        <Route path="/checking-another">
+                            <CheckingAnotherPage history={this.props.history}/>
                         </Route>
-                        <Route path="/cross-check"></Route>
+                        <Route path="/self-test">
+                            <SelfTestPage history={this.props.history}/>
+                        </Route>
+                        <Route path="/reviews">
+                            <ReviewsPage history={this.props.history}/>
+                        </Route>
+                        <Route path="/cross-check">
+                            <CrossCheckPage history={this.props.history}/>
+                        </Route>
                         <Route path="/registration">
                             <RegistrationForm history = {this.props.history}/>
                         </Route>

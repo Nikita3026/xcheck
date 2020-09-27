@@ -62,7 +62,7 @@ class VerificationRequest extends Component<{}, State> {
     this.setState({demo: evt.target.value})
   }
   handleFinish = () => {
-    console.log(this.state)
+
   }
 
   render() {

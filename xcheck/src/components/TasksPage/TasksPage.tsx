@@ -13,10 +13,8 @@ export class TasksPage extends Component<Props,{}> {
     request = new Requests();
      componentDidMount = async () : Promise<any> => {
         const code :any = window.location.href.match(/\?code=(.*)/);
-        console.log(code)
         if(code){
           const accessToken = await this.request.addOAuthToken(code[1]);
-          console.log(accessToken)
           const user = await this.request.getOAuthToken(accessToken)
           if(await this.isAccountUnic(user.login) === 0) {
             await this.request.addData('users', {
